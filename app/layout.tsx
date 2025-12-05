@@ -69,7 +69,7 @@ export const metadata: Metadata = {
       "Award-winning Senior Product Designer with 15+ years crafting world-class UI/UX experiences. Expert in SaaS, healthcare, fintech, and design systems.",
     images: [
       {
-        url: "/images/og-image.png",
+        url: "/images/og-image.svg",
         width: 1200,
         height: 630,
         alt: "Miha Sodja - Best Senior Product Designer Portfolio",
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Miha Sodja | Best Senior Product Designer | Top UI/UX Expert",
     description: "Award-winning Senior Product Designer with 15+ years crafting world-class UI/UX experiences.",
-    images: ["/images/og-image.png"],
+    images: ["/images/og-image.svg"],
     creator: "@mihasodja",
   },
   alternates: {
@@ -90,21 +90,9 @@ export const metadata: Metadata = {
     "google-site-verification": "YOUR_GOOGLE_VERIFICATION_CODE",
   },
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: "/favicon.svg",
+    apple: "/apple-icon.svg",
   },
 }
 
