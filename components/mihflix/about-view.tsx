@@ -8,12 +8,13 @@ import { cn } from "@/lib/utils"
 
 function PulsatingDot({ className, delay = 0 }: { className?: string; delay?: number }) {
   return (
-    <span className={cn("relative inline-flex", className)}>
-      <span
-        className="absolute inline-flex h-full w-full rounded-full bg-[#E50914] opacity-75 animate-ping"
-        style={{ animationDelay: `${delay}ms`, animationDuration: "2s" }}
+    <span className={cn("relative inline-flex items-center justify-center", className)}>
+      <motion.span
+        className="absolute h-2 w-2 rounded-full bg-[#E50914]/40"
+        animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
+        transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: delay / 1000 }}
       />
-      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#E50914]" />
+      <span className="relative h-1.5 w-1.5 rounded-full bg-[#E50914]" />
     </span>
   )
 }
@@ -40,27 +41,52 @@ function TimelineDot({ isActive, index }: { isActive: boolean; index: number }) 
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0.5 + index * 0.15, duration: 0.4, type: "spring", stiffness: 200 }}
-      className="relative"
+      className="relative flex items-center justify-center"
     >
-      {/* Outer glow ring */}
-      <motion.div
-        className="absolute -inset-2 rounded-full bg-[#E50914]"
-        animate={{
-          opacity: isActive ? [0.3, 0.6, 0.3] : 0.2,
-          scale: isActive ? [1, 1.3, 1] : 1,
-        }}
-        transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-        style={{ filter: "blur(4px)" }}
+      {/* Subtle outer glow - only for active */}
+      {isActive && (
+        <motion.div
+          className="absolute w-5 h-5 rounded-full bg-[#E50914]/20"
+          animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.1, 0.3] }}
+          transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        />
+      )}
+      {/* Core dot - smaller and cleaner */}
+      <div
+        className={cn(
+          "relative w-2.5 h-2.5 rounded-full z-10 transition-colors duration-300",
+          isActive ? "bg-[#E50914]" : "bg-gray-600",
+        )}
       />
-      {/* Middle ring */}
-      <motion.div
-        className="absolute -inset-1 rounded-full bg-[#E50914]/40"
-        animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
-        transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: index * 0.2 }}
-      />
-      {/* Core dot */}
-      <div className="relative w-3 h-3 bg-[#E50914] rounded-full ring-4 ring-black z-10" />
     </motion.div>
+  )
+}
+
+function TimelineParticles({ scrollProgress }: { scrollProgress: number }) {
+  return (
+    <div className="absolute left-3 md:left-1/2 top-0 bottom-0 w-px pointer-events-none overflow-visible">
+      {[...Array(5)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 rounded-full bg-[#E50914]"
+          style={{
+            left: -2,
+            top: `${(scrollProgress * 100) - 2 + i * 0.5}%`,
+          }}
+          animate={{
+            x: [0, i % 2 === 0 ? 8 : -8, 0],
+            opacity: [0, 0.8, 0],
+            scale: [0.5, 1, 0.5],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Number.POSITIVE_INFINITY,
+            delay: i * 0.4,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
   )
 }
 
@@ -242,6 +268,9 @@ export function AboutView() {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
   const lineOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1])
 
+  const [scrollValue, setScrollValue] = useState(0)
+  scrollYProgress.on("change", (v) => setScrollValue(v))
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -361,18 +390,34 @@ export function AboutView() {
         </motion.div>
 
         <div ref={timelineRef} className="relative">
-          {/* Background line */}
-          <div className="absolute left-3 md:left-1/2 top-0 bottom-0 w-0.5 bg-gray-800/50" />
+          {/* Background line - more subtle */}
+          <div className="absolute left-3 md:left-1/2 top-0 bottom-0 w-px bg-gray-800/30" />
 
-          {/* Animated fill line based on scroll */}
           <motion.div
-            className="absolute left-3 md:left-1/2 top-0 w-0.5 bg-gradient-to-b from-[#E50914] via-[#ff3d47] to-[#E50914]"
+            className="absolute left-3 md:left-1/2 top-0 w-px"
             style={{
               height: lineHeight,
               opacity: lineOpacity,
-              boxShadow: "0 0 20px rgba(229,9,20,0.5), 0 0 40px rgba(229,9,20,0.3)",
+              background: "linear-gradient(180deg, #E50914 0%, #E50914 90%, transparent 100%)",
             }}
-          />
+          >
+            {/* Subtle glow effect */}
+            <div
+              className="absolute inset-0 w-px"
+              style={{
+                boxShadow: "0 0 8px rgba(229,9,20,0.4), 0 0 16px rgba(229,9,20,0.2)",
+              }}
+            />
+            {/* Leading edge glow dot */}
+            <motion.div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#E50914]"
+              style={{
+                boxShadow: "0 0 12px rgba(229,9,20,0.8), 0 0 24px rgba(229,9,20,0.4)",
+              }}
+            />
+          </motion.div>
+
+          <TimelineParticles scrollProgress={scrollValue} />
 
           {/* Experience Items */}
           <div className="space-y-8 md:space-y-12">
@@ -400,32 +445,28 @@ export function AboutView() {
             transition={{ duration: 0.3 }}
             className="inline-block p-8 bg-gradient-to-br from-gray-900/80 to-gray-900/40 backdrop-blur rounded-2xl border border-gray-800 relative overflow-hidden group hover:border-[#E50914]/30"
           >
-            {/* Animated top glow */}
-            <motion.div
-              className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#E50914] to-transparent"
-              animate={{ opacity: [0.3, 0.7, 0.3] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            />
+            {/* Subtle top accent line */}
+            <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-[#E50914]/50 to-transparent" />
 
-            {/* Floating particles */}
-            <div className="absolute inset-0 overflow-hidden">
-              {[...Array(3)].map((_, i) => (
+            {/* Minimal floating particles */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {[...Array(4)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-1 h-1 bg-[#E50914]/30 rounded-full"
+                  className="absolute w-0.5 h-0.5 rounded-full bg-[#E50914]/40"
                   style={{
-                    left: `${20 + i * 30}%`,
-                    top: "80%",
+                    left: `${15 + i * 25}%`,
+                    bottom: "10%",
                   }}
                   animate={{
-                    y: [-20, -60, -20],
-                    opacity: [0, 1, 0],
+                    y: [0, -40, 0],
+                    opacity: [0, 0.6, 0],
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 4,
                     repeat: Number.POSITIVE_INFINITY,
-                    delay: i * 1,
-                    ease: "easeInOut",
+                    delay: i * 0.8,
+                    ease: "easeOut",
                   }}
                 />
               ))}
