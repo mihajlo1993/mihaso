@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { useRouter } from "next/navigation"
 import { ContentRow } from "./content-row"
 import { Footer } from "./footer"
 import { CaseStudyModal } from "./case-study-modal"
@@ -19,7 +18,6 @@ interface HomeScreenProps {
 }
 
 export function HomeScreen({ profile }: HomeScreenProps) {
-  const router = useRouter()
   const [hoveredItem, setHoveredItem] = useState<ContentItem | null>(null)
   const [selectedItem, setSelectedItem] = useState<ContentItem | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -53,33 +51,30 @@ export function HomeScreen({ profile }: HomeScreenProps) {
     setHoveredItem(item)
   }, [])
 
-  const handleItemClick = useCallback(
-    (item: ContentItem) => {
-      if (item.type === "link") {
-        if (item.id === "contact") {
-          router.push("/contact")
-          return
-        } else if (item.id === "resume") {
-          return
-        } else if (item.liveUrl) {
-          window.open(item.liveUrl, "_blank", "noopener,noreferrer")
-          return
-        }
-      } else if (item.id === "highlight-1") {
-        setIsDeFiCaseStudyOpen(true)
-      } else if (item.id === "highlight-2") {
-        setIsTreeAppCaseStudyOpen(true)
-      } else if (item.type === "testimonial") {
-        const index = testimonials.findIndex((t) => t.id === item.id)
-        setTestimonialIndex(index >= 0 ? index : 0)
-        setIsTestimonialModalOpen(true)
-      } else {
-        setSelectedItem(item)
-        setIsModalOpen(true)
+  const handleItemClick = useCallback((item: ContentItem) => {
+    if (item.type === "link") {
+      if (item.id === "contact") {
+        window.location.hash = "contact"
+        return
+      } else if (item.id === "resume") {
+        return
+      } else if (item.liveUrl) {
+        window.open(item.liveUrl, "_blank", "noopener,noreferrer")
+        return
       }
-    },
-    [router],
-  )
+    } else if (item.id === "highlight-1") {
+      setIsDeFiCaseStudyOpen(true)
+    } else if (item.id === "highlight-2") {
+      setIsTreeAppCaseStudyOpen(true)
+    } else if (item.type === "testimonial") {
+      const index = testimonials.findIndex((t) => t.id === item.id)
+      setTestimonialIndex(index >= 0 ? index : 0)
+      setIsTestimonialModalOpen(true)
+    } else {
+      setSelectedItem(item)
+      setIsModalOpen(true)
+    }
+  }, [])
 
   const scrollToWork = useCallback(() => {
     const element = document.getElementById("highlight-reel")
@@ -89,8 +84,8 @@ export function HomeScreen({ profile }: HomeScreenProps) {
   }, [])
 
   const scrollToContact = useCallback(() => {
-    router.push("/contact")
-  }, [router])
+    window.location.hash = "contact"
+  }, [])
 
   return (
     <motion.div

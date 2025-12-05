@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { ProfilePicker } from "@/components/mihflix/profile-picker"
 import { TopNav } from "@/components/mihflix/top-nav"
 import { HomeScreen } from "@/components/mihflix/home-screen"
@@ -13,14 +13,37 @@ import { AnimatePresence } from "framer-motion"
 type AppState = "profile-picker" | "main"
 type Tab = "home" | "work" | "about" | "contact"
 
+const validTabs: Tab[] = ["home", "work", "about", "contact"]
+
+function getTabFromHash(): Tab {
+  if (typeof window === "undefined") return "home"
+  const hash = window.location.hash.replace("#", "")
+  return validTabs.includes(hash as Tab) ? (hash as Tab) : "home"
+}
+
 export default function MihFlixApp() {
   const [appState, setAppState] = useState<AppState>("profile-picker")
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>("home")
 
+  useEffect(() => {
+    // Set initial tab from hash
+    setActiveTab(getTabFromHash())
+
+    // Listen for hash changes (browser back/forward)
+    const handleHashChange = () => {
+      setActiveTab(getTabFromHash())
+    }
+
+    window.addEventListener("hashchange", handleHashChange)
+    return () => window.removeEventListener("hashchange", handleHashChange)
+  }, [])
+
   const handleProfileSelect = useCallback((profile: Profile) => {
     setSelectedProfile(profile)
     setAppState("main")
+    const currentHash = getTabFromHash()
+    window.location.hash = currentHash
   }, [])
 
   const handleProfileSwitch = useCallback(() => {
@@ -28,7 +51,9 @@ export default function MihFlixApp() {
   }, [])
 
   const handleTabChange = useCallback((tab: string) => {
-    setActiveTab(tab as Tab)
+    const newTab = tab as Tab
+    setActiveTab(newTab)
+    window.location.hash = newTab
   }, [])
 
   // Profile picker
