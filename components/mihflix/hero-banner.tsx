@@ -16,7 +16,7 @@ type HeroSlide = {
 const heroSlides: HeroSlide[] = [
   {
     type: "video",
-    src: "https://app.vidzflow.com/v/XaXNYRQzTC?dq=1080&ap=true&muted=true&loop=true&ctp=false&bv=false&piv=true&playsinline=true&bc=%234E5FFD&controls=false",
+    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Video_Enhanced_for_Mobile_UI-kTEWcysxZO4TYO2nJw7SWoNvBlLxSR.mp4",
   },
 ]
 
@@ -28,20 +28,17 @@ export function HeroBanner({ onViewWork, onGetInTouch }: HeroBannerProps) {
   return (
     <div className="relative w-full h-[85vh] min-h-[500px] max-h-[900px] md:h-[70vh] md:max-h-[800px] overflow-hidden">
       <div className="absolute inset-0">
-        <iframe
+        <video
           src={heroSlides[0].src}
-          title="Hero video"
+          autoPlay
+          muted
+          loop
+          playsInline
           className="absolute inset-0 w-full h-full object-cover"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
             transform: "scale(1.2)",
             transformOrigin: "center center",
           }}
-          frameBorder="0"
-          scrolling="no"
-          allow="autoplay; fullscreen"
         />
       </div>
 
