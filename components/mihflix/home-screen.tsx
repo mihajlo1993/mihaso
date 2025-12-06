@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react"
 import { ContentRow } from "./content-row"
+import { HighlightReelRow } from "./highlight-reel-row"
 import { Footer } from "./footer"
 import { CaseStudyModal } from "./case-study-modal"
 import { TestimonialModal } from "./testimonial-modal"
@@ -26,13 +27,7 @@ export function HomeScreen({ profile }: HomeScreenProps) {
   const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false)
   const [testimonialIndex, setTestimonialIndex] = useState(0)
 
-  const rows = [
-    {
-      id: "highlight-reel",
-      title: "Highlight Reel",
-      subtitle: "Visual showcase",
-      items: highlightReel,
-    },
+  const otherRows = [
     {
       id: "testimonials",
       title: "What Clients Say",
@@ -49,6 +44,14 @@ export function HomeScreen({ profile }: HomeScreenProps) {
 
   const handleItemHover = useCallback((item: ContentItem | null) => {
     setHoveredItem(item)
+  }, [])
+
+  const handleHighlightClick = useCallback((item: ContentItem) => {
+    if (item.id === "highlight-1") {
+      setIsDeFiCaseStudyOpen(true)
+    } else if (item.id === "highlight-2") {
+      setIsTreeAppCaseStudyOpen(true)
+    }
   }, [])
 
   const handleItemClick = useCallback((item: ContentItem) => {
@@ -103,14 +106,30 @@ export function HomeScreen({ profile }: HomeScreenProps) {
         transition={{ delay: 0.1, duration: 0.4 }}
         className="relative z-10 space-y-16 pt-12 pb-20 md:space-y-20 md:pt-12"
       >
-        {rows.map((row, index) => (
+        <motion.div
+          id="highlight-reel"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.15,
+            duration: 0.35,
+            ease: "easeOut",
+          }}
+        >
+          <AmbientSectionWrapper>
+            <HighlightReelRow items={highlightReel} onItemClick={handleHighlightClick} />
+          </AmbientSectionWrapper>
+        </motion.div>
+
+        {/* Other rows (testimonials, contact) */}
+        {otherRows.map((row, index) => (
           <motion.div
             key={row.id}
             id={row.id}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 0.15 + index * 0.08,
+              delay: 0.23 + index * 0.08,
               duration: 0.35,
               ease: "easeOut",
             }}
@@ -125,7 +144,7 @@ export function HomeScreen({ profile }: HomeScreenProps) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            delay: 0.15 + rows.length * 0.08,
+            delay: 0.23 + otherRows.length * 0.08,
             duration: 0.35,
             ease: "easeOut",
           }}
