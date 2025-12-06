@@ -12,10 +12,26 @@ import type { ContentItem } from "@/lib/data"
 interface HighlightReelRowProps {
   items: ContentItem[]
   onItemClick: (item: ContentItem) => void
+  size?: "default" | "large"
 }
 
-export function HighlightReelRow({ items, onItemClick }: HighlightReelRowProps) {
+export function HighlightReelRow({ items, onItemClick, size = "default" }: HighlightReelRowProps) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id || "")
+
+  const sizeConfig = {
+    default: {
+      height: "clamp(250px, 45vh, 425px)",
+      activeWidth: "760px",
+      inactiveWidth: "240px",
+    },
+    large: {
+      height: "clamp(288px, 52vh, 489px)",
+      activeWidth: "874px",
+      inactiveWidth: "276px",
+    },
+  }
+
+  const config = sizeConfig[size]
 
   const handleCardClick = useCallback(
     (item: ContentItem) => {
@@ -48,150 +64,112 @@ export function HighlightReelRow({ items, onItemClick }: HighlightReelRowProps) 
 
   return (
     <div className="relative py-0">
-      {/* Section Header */}
-      <div className="mb-6 flex flex-col gap-1.5 px-6 md:mb-8 md:px-14 lg:px-16">
-        <h2 className="text-2xl font-bold tracking-tight text-white md:text-3xl">Highlight Reel</h2>
-        <span className="text-sm text-gray-400 md:text-base">Visual showcase</span>
-      </div>
-
-      {/* Cards Container */}
-      <div className="scrollbar-hide flex items-start gap-3 overflow-x-auto px-6 pb-4 md:gap-4 md:px-14 md:pb-6 lg:gap-5 lg:px-16">
-        {items.map((item) => {
+      <div
+        className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {items.map((item, index) => {
           const isActive = item.id === activeId
 
           return (
-            <motion.div
+            <motion.button
               key={item.id}
-              initial={false}
+              onClick={() => handleCardClick(item)}
+              onKeyDown={(e) => handleKeyDown(e, item)}
               animate={{
-                width: isActive ? "min(760px, 85vw)" : "min(240px, 40vw)",
+                width: isActive ? config.activeWidth : config.inactiveWidth,
               }}
               transition={{
-                width: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
+                duration: 0.5,
+                ease: [0.32, 0.72, 0, 1],
               }}
-              className="relative flex-shrink-0"
-              style={{
-                height: "clamp(250px, 45vh, 425px)",
-              }}
+              className={cn(
+                "relative flex-shrink-0 rounded-xl overflow-hidden cursor-pointer",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+                "transition-[filter,box-shadow] duration-200",
+                isActive
+                  ? "shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                  : "hover:brightness-110 hover:ring-1 hover:ring-white/20",
+              )}
+              style={{ height: config.height }}
+              aria-label={isActive ? `View ${item.title} case study` : `Select ${item.title}`}
+              aria-pressed={isActive}
             >
+              {/* Background Image */}
+              <div className="absolute inset-0">
+                {item.thumbnailUrl ? (
+                  <Image
+                    src={item.thumbnailUrl || "/placeholder.svg"}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    sizes={isActive ? config.activeWidth : config.inactiveWidth}
+                    priority={index < 2}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900" />
+                )}
+              </div>
+
+              {/* Gradient overlays */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
+
+              {/* Active state content - always rendered, visibility controlled by CSS */}
               <div
                 className={cn(
-                  "group relative h-full w-full cursor-pointer overflow-hidden rounded-xl",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
-                  "transition-shadow duration-300",
-                  isActive && "shadow-2xl shadow-black/60",
-                  !isActive && "hover:shadow-lg hover:shadow-black/40",
+                  "absolute inset-0 flex flex-col justify-end p-6 md:p-8",
+                  "transition-opacity duration-300 delay-150",
+                  isActive ? "opacity-100" : "opacity-0 pointer-events-none",
                 )}
-                onClick={() => handleCardClick(item)}
-                onKeyDown={(e) => handleKeyDown(e, item)}
-                tabIndex={0}
-                role="button"
-                aria-label={isActive ? `View ${item.title} case study` : `Select ${item.title}`}
-                aria-pressed={isActive}
               >
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                  {item.thumbnailUrl ? (
-                    <Image
-                      src={item.thumbnailUrl || "/placeholder.svg"}
-                      alt={item.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 85vw, 760px"
-                      priority={isActive}
-                    />
-                  ) : (
-                    <div
-                      className={cn(
-                        "h-full w-full",
-                        item.gradientType === "blue-purple"
-                          ? "bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800"
-                          : "bg-gradient-to-br from-green-600 via-emerald-700 to-teal-800",
-                      )}
-                    />
-                  )}
-                </div>
-
-                {/* Vignette Gradient */}
-                <div
-                  className={cn(
-                    "absolute inset-0 transition-opacity duration-300",
-                    isActive
-                      ? "bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-100"
-                      : "bg-gradient-to-t from-black/70 via-black/10 to-black/5 opacity-100",
-                  )}
-                />
-
-                {/* Active Content - Uses CSS opacity transition, always rendered but hidden when inactive */}
-                <div
-                  className={cn(
-                    "absolute inset-x-0 bottom-0 p-5 md:p-6 lg:p-8",
-                    "transition-opacity duration-200",
-                    isActive ? "opacity-100 delay-150" : "opacity-0 pointer-events-none",
-                  )}
-                >
-                  {/* Tags */}
-                  <div className="mb-2 flex flex-wrap gap-2 md:mb-3">
-                    {item.tags?.slice(0, 3).map((tag) => (
+                {/* Tags */}
+                {item.tags && item.tags.length > 0 && (
+                  <div className="flex gap-2 mb-3 flex-wrap">
+                    {item.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full bg-white/15 px-2.5 py-0.5 text-[11px] font-medium text-white/90 backdrop-blur-sm md:px-3 md:py-1 md:text-xs"
+                        className="px-2.5 py-1 bg-white/15 backdrop-blur-sm rounded-full text-xs text-white/90 font-medium"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-
-                  {/* Title */}
-                  <h3 className="mb-1.5 text-xl font-bold tracking-tight text-white drop-shadow-lg md:mb-2 md:text-2xl lg:text-3xl">
-                    {item.title}
-                  </h3>
-
-                  {/* Short Description */}
-                  {item.shortDescription && (
-                    <p className="mb-4 line-clamp-2 text-sm text-gray-200/90 md:mb-5 md:text-base">
-                      {item.shortDescription}
-                    </p>
-                  )}
-
-                  {/* View Case Study CTA */}
-                  <button
-                    onClick={(e) => handleViewCaseStudy(e, item)}
-                    className="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-black transition-colors duration-200 hover:bg-white/90 md:px-5 md:py-3 md:text-base"
-                    aria-label={`View ${item.title} case study`}
-                  >
-                    <Play className="h-4 w-4 fill-current md:h-5 md:w-5" />
-                    View case study
-                  </button>
-                </div>
-
-                <div
-                  className={cn(
-                    "absolute inset-x-0 bottom-0 p-4 md:p-5",
-                    "transition-opacity duration-150",
-                    !isActive ? "opacity-100" : "opacity-0 pointer-events-none",
-                  )}
-                >
-                  <p className="text-center text-sm font-semibold text-white drop-shadow-md md:text-base">
-                    {item.title}
-                  </p>
-                </div>
-
-                {/* Hover Ring for Inactive Cards */}
-                {!isActive && (
-                  <div
-                    className={cn(
-                      "pointer-events-none absolute inset-0 rounded-xl",
-                      "ring-1 ring-white/0 transition-all duration-200",
-                      "group-hover:ring-white/25 group-hover:bg-white/5",
-                    )}
-                  />
                 )}
 
-                {/* Active Card Border */}
-                {isActive && <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-white/20" />}
+                {/* Title */}
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 text-balance leading-tight">
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                {item.shortDescription && (
+                  <p className="text-sm md:text-base text-gray-300 mb-4 line-clamp-2 max-w-lg">
+                    {item.shortDescription}
+                  </p>
+                )}
+
+                {/* CTA Button */}
+                <button
+                  onClick={(e) => handleViewCaseStudy(e, item)}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white text-black rounded-lg font-semibold text-sm hover:bg-gray-100 transition-colors w-fit"
+                >
+                  <Play className="w-4 h-4 fill-current" />
+                  View case study
+                </button>
               </div>
-            </motion.div>
+
+              {/* Inactive state content - always rendered, visibility controlled by CSS */}
+              <div
+                className={cn(
+                  "absolute inset-0 flex flex-col justify-end p-4",
+                  "transition-opacity duration-200",
+                  isActive ? "opacity-0 pointer-events-none" : "opacity-100",
+                )}
+              >
+                <h3 className="text-sm font-semibold text-white text-center leading-tight">{item.title}</h3>
+              </div>
+            </motion.button>
           )
         })}
       </div>
