@@ -1,11 +1,336 @@
 "use client"
 
-import { motion, useScroll, useTransform, useInView } from "framer-motion"
-import { workExperiences } from "@/lib/data"
-import { Calendar, MapPin, ChevronDown } from "lucide-react"
-import { useState, useRef } from "react"
-import { cn } from "@/lib/utils"
+import type React from "react"
+
+import { motion, AnimatePresence, useInView } from "framer-motion"
+import { useState, useRef, useMemo } from "react"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
+import { workExperiences } from "@/lib/data"
+import { ChevronDown, Sparkles, Zap } from "lucide-react"
+
+interface Particle {
+  id: number
+  x: number
+  y: number
+  size: number
+  color: string
+  blur: number
+  duration: number
+  delay: number
+}
+
+interface OrbitalParticle {
+  id: string
+  angle: number
+  orbitRadius: number
+  size: number
+  duration: number
+  blur: number
+  color: string
+}
+
+interface FloatingParticle {
+  id: string
+  x: number
+  y: number
+  size: number
+  color: string
+  animationType: number
+  delay: number
+  blur: number
+}
+
+interface EdgeParticle {
+  id: string
+  startX: number
+  startY: number
+  size: number
+  color: string
+  delay: number
+  blur: number
+}
+
+function generateBackgroundParticles(): Particle[] {
+  const particles: Particle[] = []
+  const colors = ["rgba(255,255,255,0.10)", "rgba(130,170,255,0.20)", "rgba(209,58,255,0.22)"]
+
+  for (let i = 0; i < 24; i++) {
+    let x = Math.random() * 100
+    const y = Math.random() * 100
+
+    if (x > 30 && x < 70 && y > 15 && y < 55) {
+      x = x < 50 ? x - 20 : x + 20
+    }
+
+    particles.push({
+      id: i,
+      x: Math.max(0, Math.min(100, x)),
+      y: Math.max(0, Math.min(100, y)),
+      size: 2.5 + Math.random() * 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      blur: 0,
+      duration: 18 + Math.random() * 14,
+      delay: Math.random() * 10,
+    })
+  }
+  return particles
+}
+
+function generateMidgroundParticles(): Particle[] {
+  const particles: Particle[] = []
+  const colors = ["rgba(255,255,255,0.25)", "rgba(209,58,255,0.30)"]
+
+  for (let i = 0; i < 14; i++) {
+    const isLeftSide = i % 2 === 0
+    const x = isLeftSide ? 5 + Math.random() * 22 : 73 + Math.random() * 22
+    const y = 20 + Math.random() * 65
+
+    particles.push({
+      id: i,
+      x,
+      y,
+      size: 3 + Math.random() * 7,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      blur: Math.random() > 0.5 ? 1.5 : 2.5,
+      duration: 12 + Math.random() * 10,
+      delay: Math.random() * 8,
+    })
+  }
+  return particles
+}
+
+function generateForegroundParticles(): Particle[] {
+  const particles: Particle[] = []
+
+  for (let i = 0; i < 10; i++) {
+    let x: number
+    let y: number
+
+    if (i < 4) {
+      x = i % 2 === 0 ? 5 + Math.random() * 15 : 80 + Math.random() * 15
+      y = 35 + Math.random() * 30
+    } else {
+      x = 20 + Math.random() * 60
+      y = 70 + Math.random() * 25
+    }
+
+    particles.push({
+      id: i,
+      x,
+      y,
+      size: 2 + Math.random() * 2.5,
+      color: "rgba(255,255,255,0.22)",
+      blur: 1,
+      duration: 14 + Math.random() * 10,
+      delay: Math.random() * 6,
+    })
+  }
+  return particles
+}
+
+function ParticlesBack({ mouseOffset }: { mouseOffset: { x: number; y: number } }) {
+  const particles = useMemo(() => generateBackgroundParticles(), [])
+
+  return (
+    <div
+      className="particles-back"
+      style={{
+        transform: `translate3d(${mouseOffset.x * 0.02}px, ${mouseOffset.y * 0.02}px, 0)`,
+        transition: "transform 0.3s ease-out",
+      }}
+    >
+      {particles.map((p) => (
+        <span
+          key={p.id}
+          className="particle particle-bg"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            backgroundColor: p.color,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function ParticlesMid({ mouseOffset }: { mouseOffset: { x: number; y: number } }) {
+  const particles = useMemo(() => generateMidgroundParticles(), [])
+
+  return (
+    <div
+      className="particles-mid"
+      style={{
+        transform: `translate3d(${mouseOffset.x * 0.04}px, ${mouseOffset.y * 0.04}px, 0)`,
+        transition: "transform 0.3s ease-out",
+      }}
+    >
+      {particles.map((p) => (
+        <span
+          key={p.id}
+          className="particle particle-mid"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            backgroundColor: p.color,
+            filter: p.blur > 0 ? `blur(${p.blur}px)` : undefined,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function ParticlesFront({ mouseOffset }: { mouseOffset: { x: number; y: number } }) {
+  const particles = useMemo(() => generateForegroundParticles(), [])
+
+  return (
+    <div
+      className="particles-front"
+      style={{
+        transform: `translate3d(${mouseOffset.x * 0.06}px, ${mouseOffset.y * 0.06}px, 0)`,
+        transition: "transform 0.3s ease-out",
+      }}
+    >
+      {particles.map((p) => (
+        <span
+          key={p.id}
+          className="particle particle-front"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            backgroundColor: p.color,
+            filter: `blur(${p.blur}px)`,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function SpectacularParticles() {
+  // Orbital particles - rotate around the portrait center
+  const orbitalParticles: OrbitalParticle[] = Array.from({ length: 10 }, (_, i) => ({
+    id: `orbital-${i}`,
+    angle: (i / 10) * 360,
+    orbitRadius: 35 + (i % 3) * 10, // Three orbital paths
+    size: 3 + Math.random() * 3,
+    color: i % 2 === 0 ? "rgba(255, 255, 255, 0.6)" : "rgba(209, 58, 255, 0.5)",
+    duration: 20 + (i % 3) * 5,
+    blur: 1 + Math.random(),
+  }))
+
+  // Floating particles - varied behaviors
+  const floatingParticles: FloatingParticle[] = Array.from({ length: 12 }, (_, i) => ({
+    id: `float-${i}`,
+    x: 10 + Math.random() * 80,
+    y: 10 + Math.random() * 80,
+    size: 2 + Math.random() * 4,
+    color:
+      i % 3 === 0 ? "rgba(209, 58, 255, 0.6)" : i % 3 === 1 ? "rgba(255, 255, 255, 0.5)" : "rgba(139, 92, 246, 0.4)",
+    animationType: i % 3,
+    delay: Math.random() * 3,
+    blur: 1 + Math.random() * 2,
+  }))
+
+  // Edge accent particles - diagonal drift
+  const edgeParticles: EdgeParticle[] = Array.from({ length: 6 }, (_, i) => ({
+    id: `edge-${i}`,
+    startX: i < 3 ? 5 + Math.random() * 15 : 85 - Math.random() * 15,
+    startY: 20 + Math.random() * 60,
+    size: 2 + Math.random() * 3,
+    color: "rgba(255, 255, 255, 0.4)",
+    delay: Math.random() * 4,
+    blur: 2 + Math.random() * 2,
+  }))
+
+  return (
+    <>
+      {/* Layer A: Background particles */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 5 }}>
+        {/* Orbital particles */}
+        {orbitalParticles.map((p) => (
+          <div
+            key={p.id}
+            className="absolute left-1/2 top-1/2 rounded-full"
+            style={
+              {
+                width: p.size,
+                height: p.size,
+                backgroundColor: p.color,
+                filter: `blur(${p.blur}px)`,
+                boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
+                animationName: "orbit",
+                animationDuration: `${p.duration}s`,
+                animationTimingFunction: "linear",
+                animationIterationCount: "infinite",
+                "--orbit-radius": `${p.orbitRadius}%`,
+                "--orbit-angle": `${p.angle}deg`,
+              } as React.CSSProperties
+            }
+          />
+        ))}
+
+        {/* Floating particles */}
+        {floatingParticles.map((p) => (
+          <div
+            key={p.id}
+            className="absolute rounded-full"
+            style={{
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              width: p.size,
+              height: p.size,
+              backgroundColor: p.color,
+              filter: `blur(${p.blur}px)`,
+              boxShadow: `0 0 ${p.size * 3}px ${p.color}`,
+              animationName:
+                p.animationType === 0 ? "particlePulse" : p.animationType === 1 ? "particleFloat" : "particleBreathe",
+              animationDuration: `${3 + Math.random() * 2}s`,
+              animationTimingFunction: "ease-in-out",
+              animationIterationCount: "infinite",
+              animationDelay: `${p.delay}s`,
+            }}
+          />
+        ))}
+
+        {/* Edge accent particles */}
+        {edgeParticles.map((p) => (
+          <div
+            key={p.id}
+            className="absolute rounded-full"
+            style={{
+              left: `${p.startX}%`,
+              top: `${p.startY}%`,
+              width: p.size,
+              height: p.size,
+              backgroundColor: p.color,
+              filter: `blur(${p.blur}px)`,
+              animationName: "particleDrift",
+              animationDuration: "8s",
+              animationTimingFunction: "ease-in-out",
+              animationIterationCount: "infinite",
+              animationDelay: `${p.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+    </>
+  )
+}
 
 function PulsatingDot({ className, delay = 0 }: { className?: string; delay?: number }) {
   return (
@@ -23,7 +348,6 @@ function PulsatingDot({ className, delay = 0 }: { className?: string; delay?: nu
 function CurrentBadge() {
   return (
     <span className="relative inline-flex items-center">
-      {/* Animated glow behind badge */}
       <span className="absolute inset-0 bg-white rounded-full blur-md opacity-50 animate-pulse" />
       <span className="relative px-2.5 py-0.5 bg-white text-black text-xs font-medium rounded-full flex items-center gap-1.5 shadow-lg shadow-white/30">
         <span className="relative flex h-1.5 w-1.5">
@@ -44,7 +368,6 @@ function TimelineDot({ isActive, index }: { isActive: boolean; index: number }) 
       transition={{ delay: 0.5 + index * 0.15, duration: 0.4, type: "spring", stiffness: 200 }}
       className="relative flex items-center justify-center"
     >
-      {/* Subtle outer glow - only for active */}
       {isActive && (
         <motion.div
           className="absolute w-5 h-5 rounded-full bg-white/20"
@@ -52,7 +375,6 @@ function TimelineDot({ isActive, index }: { isActive: boolean; index: number }) 
           transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
         />
       )}
-      {/* Core dot - smaller and cleaner */}
       <div
         className={cn(
           "relative w-2.5 h-2.5 rounded-full z-10 transition-colors duration-300",
@@ -96,17 +418,18 @@ function ExperienceCard({
   index,
   isExpanded,
   onToggle,
+  isEven,
 }: {
   exp: (typeof workExperiences)[0]
   index: number
   isExpanded: boolean
   onToggle: () => void
+  isEven: boolean
 }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(cardRef, { once: true, margin: "-100px" })
 
-  // Alternating animation direction
-  const slideDirection = index % 2 === 0 ? -60 : 60
+  const slideDirection = isEven ? -60 : 60
 
   return (
     <motion.div
@@ -122,411 +445,298 @@ function ExperienceCard({
         "relative",
         "pl-10 md:pl-0",
         "md:w-[calc(50%-2rem)]",
-        index % 2 === 0 ? "md:ml-0 md:pr-8" : "md:ml-auto md:pl-8",
+        isEven ? "md:ml-0 md:pr-8" : "md:ml-auto md:pl-8",
       )}
     >
-      {/* Timeline Dot */}
       <div
         className={cn(
           "absolute z-10",
           "left-[4px] top-6",
-          index % 2 === 0 ? "md:left-auto md:right-[-8px]" : "md:left-[-8px] md:right-auto",
+          isEven ? "md:left-auto md:right-[-8px]" : "md:left-[-8px] md:right-auto",
         )}
       >
         <TimelineDot isActive={exp.current || false} index={index} />
       </div>
 
-      {/* Year Badge - Desktop only */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
+        whileHover={{ scale: 1.02, y: -4 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.2 }}
         className={cn(
-          "absolute top-5 hidden md:block text-white font-bold text-lg",
-          index % 2 === 0 ? "right-[-90px]" : "left-[-90px]",
+          "relative bg-gray-900/50 backdrop-blur-sm rounded-lg p-5 md:p-6 border border-gray-800 transition-all duration-300",
+          "hover:bg-gray-900/70 hover:border-white/30 hover:shadow-xl hover:shadow-white/10",
+          isExpanded && "border-white/40 bg-gray-900/70",
         )}
       >
-        {exp.year}
-      </motion.div>
-
-      {/* Card */}
-      <button onClick={onToggle} className="w-full text-left group">
         <motion.div
-          whileHover={{ scale: 1.02, y: -4 }}
-          whileTap={{ scale: 0.98 }}
-          transition={{ duration: 0.2 }}
-          className={cn(
-            "relative bg-gray-900/50 backdrop-blur-sm rounded-lg p-5 md:p-6 border border-gray-800 transition-all duration-300",
-            "hover:bg-gray-900/70 hover:border-white/30 hover:shadow-xl hover:shadow-white/10",
-            isExpanded && "border-white/40 bg-gray-900/70",
-          )}
-        >
-          {/* Animated border gradient on hover */}
-          <motion.div
-            className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%)",
-            }}
-          />
+          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%)",
+          }}
+        />
 
-          {/* Header */}
-          <div className="relative flex items-start justify-between gap-3 mb-3">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-white transition-colors duration-300">
-                  {exp.role}
-                </h3>
-                {exp.current && <CurrentBadge />}
-              </div>
-              <p className="text-base md:text-lg text-gray-300">{exp.company}</p>
-              <p className="text-sm text-white font-medium mt-1 md:hidden">{exp.year}</p>
+        <div className="relative flex items-start justify-between gap-3 mb-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+              <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-white transition-colors duration-300">
+                {exp.role}
+              </h3>
+              {exp.current && <CurrentBadge />}
             </div>
-            <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
-              <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors flex-shrink-0 mt-1" />
-            </motion.div>
+            <p className="text-base md:text-lg text-gray-300">{exp.company}</p>
+            <p className="text-sm text-white font-medium mt-1 md:hidden">{exp.year}</p>
           </div>
-
-          {/* Meta */}
-          <div className="relative flex flex-col md:flex-row md:flex-wrap md:items-center gap-2 md:gap-4 text-sm text-gray-400 mb-4">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 flex-shrink-0" />
-              <span>{exp.period}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <MapPin className="w-4 h-4 flex-shrink-0" />
-              <span>{exp.location}</span>
-            </div>
-            <span className="hidden md:inline text-gray-500">•</span>
-            <span className="text-gray-300 font-medium">{exp.duration}</span>
-          </div>
-
-          {/* Description */}
-          <p className="relative text-gray-300 leading-relaxed text-sm md:text-base">{exp.description}</p>
-
-          {/* Expanded Content */}
-          <motion.div
-            initial={false}
-            animate={{
-              height: isExpanded ? "auto" : 0,
-              opacity: isExpanded ? 1 : 0,
-            }}
-            transition={{ duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="mt-6 pt-6 border-t border-gray-800">
-              {/* Key Contributions */}
-              <div className="mb-6">
-                <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Key Contributions</h4>
-                <ul className="space-y-2">
-                  {exp.keyContributions.map((contribution, i) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={isExpanded ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                      transition={{ delay: i * 0.1, duration: 0.3 }}
-                      className="flex items-start gap-3 text-gray-300 text-sm md:text-base"
-                    >
-                      <span className="text-white mt-1.5 flex-shrink-0">•</span>
-                      <span className="leading-relaxed">{contribution}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Skills */}
-              <div>
-                <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Skills</h4>
-                <div className="flex flex-wrap gap-2">
-                  {exp.skills.map((skill, i) => (
-                    <motion.span
-                      key={skill}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={isExpanded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                      transition={{ delay: 0.2 + i * 0.05, duration: 0.3 }}
-                      className="px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full text-xs md:text-sm border border-gray-700 hover:border-white/50 hover:bg-white/10 transition-all duration-300"
-                    >
-                      {skill}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
-            </div>
+          <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
+            <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors flex-shrink-0 mt-1" />
           </motion.div>
+        </div>
+
+        <div className="relative flex flex-col md:flex-row md:flex-wrap md:items-center gap-2 md:gap-4 text-sm text-gray-400 mb-4">
+          <div className="flex items-center gap-1.5">
+            <motion.div className="w-4 h-4 flex-shrink-0">
+              <Sparkles />
+            </motion.div>
+            <span>{exp.period}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <motion.div className="w-4 h-4 flex-shrink-0">
+              <Zap />
+            </motion.div>
+            <span>{exp.location}</span>
+          </div>
+          <span className="hidden md:inline text-gray-500">•</span>
+          <span className="text-gray-300 font-medium">{exp.duration}</span>
+        </div>
+
+        <p className="relative text-gray-300 leading-relaxed text-sm md:text-base">{exp.description}</p>
+
+        <motion.div
+          initial={false}
+          animate={{
+            height: isExpanded ? "auto" : 0,
+            opacity: isExpanded ? 1 : 0,
+          }}
+          transition={{ duration: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
+          className="overflow-hidden"
+        >
+          <div className="mt-6 pt-6 border-t border-gray-800">
+            <div className="mb-6">
+              <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Key Contributions</h4>
+              <ul className="space-y-2">
+                {exp.keyContributions.map((contribution, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={isExpanded ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ delay: i * 0.1, duration: 0.3 }}
+                    className="flex items-start gap-3 text-gray-300 text-sm md:text-base"
+                  >
+                    <span className="text-white mt-1.5 flex-shrink-0">•</span>
+                    <span className="leading-relaxed">{contribution}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Skills</h4>
+              <div className="flex flex-wrap gap-2">
+                {exp.skills.map((skill, i) => (
+                  <motion.span
+                    key={skill}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isExpanded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                    transition={{ delay: 0.2 + i * 0.05, duration: 0.3 }}
+                    whileHover={{ scale: 1.05, borderColor: "rgba(255, 255, 255, 0.5)" }}
+                    className="px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full text-xs md:text-sm border border-gray-700 hover:border-white/50 hover:bg-white/10 transition-all duration-300 cursor-default"
+                  >
+                    {skill}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+          </div>
         </motion.div>
-      </button>
+      </motion.div>
     </motion.div>
   )
 }
 
 export function AboutView() {
-  const [expandedId, setExpandedId] = useState<string | null>(null)
-  const timelineRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: timelineRef,
-    offset: ["start center", "end center"],
-  })
+  const [expandedCards, setExpandedCards] = useState<{ [key: number]: boolean }>({})
+  const heroRef = useRef<HTMLElement>(null)
 
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
-  const lineOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1])
-
-  const [scrollValue, setScrollValue] = useState(0)
-  scrollYProgress.on("change", (v) => setScrollValue(v))
+  const toggleCard = (index: number) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }))
+  }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.22, ease: "easeOut" }}
-      className="min-h-screen bg-black pt-32 pb-20"
-    >
-      <div className="px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-          className="mb-24 grid md:grid-cols-2 gap-12 md:gap-16 items-center"
-        >
-          {/* Large portrait with premium effects */}
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
-            className="relative order-2 md:order-1"
-          >
-            {/* Animated glow border */}
+    <AnimatePresence mode="wait">
+      <motion.div
+        key="about"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        className="min-h-screen bg-black pt-32 pb-20"
+      >
+        <div className="px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
+          <section ref={heroRef} className="about-hero relative mb-24">
             <motion.div
-              className="absolute -inset-3 rounded-2xl opacity-50 blur-xl"
-              style={{
-                background: "linear-gradient(135deg, #FFFFFF 0%, rgba(255,255,255,0.85) 50%, #FFFFFF 100%)",
-              }}
-              animate={{
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Portrait container */}
-            <div className="relative rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
-              <div className="aspect-[4/5] relative">
-                <Image
-                  src="/images/miha-portrait.png"
-                  alt="Miha Sodja - Lead Product Designer"
-                  fill
-                  priority
-                  className="object-cover"
-                />
-
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                  {[...Array(8)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-1 h-1 rounded-full bg-white/40"
-                      style={{
-                        left: `${15 + (i % 4) * 25}%`,
-                        top: `${20 + Math.floor(i / 4) * 40}%`,
-                      }}
-                      animate={{
-                        y: [0, -60, 0],
-                        x: [i % 2 === 0 ? -10 : 10, 0, i % 2 === 0 ? -10 : 10],
-                        opacity: [0, 0.5, 0],
-                        scale: [0.3, 1, 0.3],
-                      }}
-                      transition={{
-                        duration: 6 + i * 0.5,
-                        repeat: Number.POSITIVE_INFINITY,
-                        delay: i * 0.8,
-                        ease: "easeOut",
-                      }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+              className="grid md:grid-cols-2 gap-12 md:gap-16 items-center relative"
+              style={{ zIndex: 3 }}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+                className="relative order-2 md:order-1"
+              >
+                <div
+                  className="aspect-[4/5] relative rounded-3xl"
+                  style={{
+                    overflow: "hidden",
+                  }}
+                >
+                  <SpectacularParticles />
+                  <div className="absolute inset-0" style={{ zIndex: 10 }}>
+                    <Image
+                      src="/images/layer-201.png"
+                      alt="Miha Sodja - Lead Product Designer"
+                      fill
+                      priority
+                      className="object-contain object-center"
                     />
-                  ))}
+                  </div>
                 </div>
+              </motion.div>
 
-                {/* Subtle vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="order-1 md:order-2 space-y-6" style={{ zIndex: 3 }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                >
+                  <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 tracking-tight">
+                    Miha Sodja
+                  </h1>
+                  <p className="text-xl md:text-2xl text-gray-400 font-light">Senior Product Designer</p>
+                </motion.div>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="text-gray-300 text-lg leading-relaxed max-w-xl"
+                >
+                  Crafting engaging digital experiences for over 15 years. Specializing in product design, design
+                  systems, and user experience across fintech, healthcare, and environmental technology sectors.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  className="flex flex-wrap gap-3"
+                >
+                  {["Product Design", "UI/UX", "Design Systems", "Prototyping"].map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </motion.div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </section>
 
-          {/* Profile info */}
-          <div className="order-1 md:order-2">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
-            >
-              Miha Sodja
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="text-2xl md:text-3xl mb-8 text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-400 to-gray-300 font-medium leading-relaxed"
-            >
-              Lead Designer | Crafting Engaging User Experiences | Utilising AI
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-              className="text-lg text-gray-400 mb-8 text-pretty leading-relaxed"
-            >
-              Senior product designer with 15+ years of experience transforming complex products into intuitive,
-              conversion-focused experiences across SaaS, healthcare, self-scheduling platforms, and high-growth
-              marketplaces.
-            </motion.p>
-
-            <motion.div
+          <div className="mb-12">
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5 }}
-              className="flex flex-wrap gap-3"
+              className="text-3xl md:text-4xl font-bold text-white mb-4"
             >
-              {["Product Design", "UI/UX", "Design Systems", "Digital Health"].map((skill, i) => (
-                <motion.span
-                  key={skill}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 + i * 0.1, duration: 0.3 }}
-                  whileHover={{ scale: 1.05, borderColor: "rgba(255, 255, 255, 0.5)" }}
-                  className="px-4 py-1.5 bg-transparent border border-gray-600 text-gray-300 rounded-full text-sm hover:border-white/50 hover:text-white transition-colors cursor-default"
-                >
-                  {skill}
-                </motion.span>
-              ))}
-            </motion.div>
+              Experience
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+              className="text-gray-400 text-lg"
+            >
+              A journey through product design leadership
+            </motion.p>
           </div>
-        </motion.div>
 
-        {/* Experience section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-          className="mb-8"
-        >
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl md:text-3xl font-bold text-white">Experience</h2>
-            <PulsatingDot />
-          </div>
-          <p className="text-gray-400 mt-2">Professional journey across healthcare, fintech, and digital products</p>
-        </motion.div>
-
-        <div ref={timelineRef} className="relative">
-          {/* Background line - more subtle */}
-          <div className="absolute left-3 md:left-1/2 top-0 bottom-0 w-px bg-gray-800/30" />
-
-          <motion.div
-            className="absolute left-3 md:left-1/2 top-0 w-px"
-            style={{
-              height: lineHeight,
-              opacity: lineOpacity,
-              background: "linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 90%, transparent 100%)",
-            }}
-          >
-            {/* Subtle glow effect */}
-            <div
-              className="absolute inset-0 w-px"
-              style={{
-                boxShadow: "0 0 8px rgba(255,255,255,0.4), 0 0 16px rgba(255,255,255,0.2)",
-              }}
-            />
-            {/* Leading edge glow dot */}
-            <motion.div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-white"
-              style={{
-                boxShadow: "0 0 12px rgba(255,255,255,0.8), 0 0 24px rgba(255,255,255,0.4)",
-              }}
-            />
-          </motion.div>
-
-          <TimelineParticles scrollProgress={scrollValue} />
-
-          {/* Experience Items */}
-          <div className="space-y-8 md:space-y-12">
+          <div className="space-y-0">
             {workExperiences.map((exp, index) => (
               <ExperienceCard
                 key={exp.id}
                 exp={exp}
                 index={index}
-                isExpanded={expandedId === exp.id}
-                onToggle={() => setExpandedId(expandedId === exp.id ? null : exp.id)}
+                isExpanded={expandedCards[index] || false}
+                onToggle={() => toggleCard(index)}
+                isEven={index % 2 === 0}
               />
             ))}
           </div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-          className="mt-20 text-center"
-        >
           <motion.div
-            whileHover={{ scale: 1.02, y: -4 }}
-            transition={{ duration: 0.3 }}
-            className="inline-block p-8 bg-gradient-to-br from-gray-900/80 to-gray-900/40 backdrop-blur rounded-2xl border border-gray-800 relative overflow-hidden group hover:border-white/30"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+            className="mt-32 text-center relative"
           >
-            {/* Subtle top accent line */}
-            <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {[...Array(4)].map((_, i) => (
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              {[...Array(6)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-0.5 h-0.5 rounded-full bg-[#D13AFF]/60"
+                  className="absolute w-1 h-1 rounded-full bg-[#D13AFF]/40"
                   style={{
-                    left: `${15 + i * 25}%`,
-                    bottom: "10%",
+                    left: `${15 + i * 15}%`,
+                    top: `${30 + (i % 3) * 20}%`,
                   }}
                   animate={{
-                    y: [0, -40, 0],
-                    opacity: [0, 0.6, 0],
+                    y: [0, -20, 0],
+                    opacity: [0.2, 0.5, 0.2],
+                    scale: [0.8, 1.2, 0.8],
                   }}
                   transition={{
-                    duration: 4,
+                    duration: 4 + i * 0.5,
                     repeat: Number.POSITIVE_INFINITY,
                     delay: i * 0.8,
-                    ease: "easeOut",
+                    ease: "easeInOut",
                   }}
                 />
               ))}
             </div>
 
-            <h3 className="text-2xl font-bold text-white mb-3 relative">Want to work together?</h3>
-            <p className="text-gray-400 mb-6 max-w-md mx-auto relative">
-              I'm available for freelance projects and full-time opportunities in product design and UX leadership.
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{"Let's work together"}</h3>
+            <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+              {"I'm always interested in new opportunities and collaborations."}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center relative">
-              <motion.a
-                href="mailto:miha.sodja@gmail.com"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-white/85 transition-all shadow-lg shadow-white/20"
-              >
-                Email me
-              </motion.a>
-              <motion.a
-                href="/#contact"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-transparent text-white rounded-lg font-semibold border border-white/25 hover:bg-white/8 hover:border-white/50 transition-all"
-              >
-                View contact page
-              </motion.a>
-            </div>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => (window.location.hash = "contact")}
+              className="px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 shadow-lg shadow-white/20"
+            >
+              Get in touch
+            </motion.button>
           </motion.div>
-        </motion.div>
-      </div>
-    </motion.div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   )
 }

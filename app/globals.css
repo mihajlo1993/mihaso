@@ -367,3 +367,190 @@ html {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+
+/* Premium cinematic particle animations for About hero */
+@keyframes orbit-slow {
+  0% {
+    transform: rotate(0deg) translateX(120px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(120px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-medium {
+  0% {
+    transform: rotate(0deg) translateX(160px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(160px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-fast {
+  0% {
+    transform: rotate(0deg) translateX(200px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(200px) rotate(-360deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+    filter: blur(1px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.4);
+    filter: blur(2px);
+  }
+}
+
+@keyframes float-vertical {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-30px) translateX(8px);
+  }
+}
+
+@keyframes float-diagonal {
+  0%,
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-15px, -20px) scale(1.1);
+  }
+  66% {
+    transform: translate(15px, -10px) scale(0.9);
+  }
+}
+
+@keyframes color-shift {
+  0%,
+  100% {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.1) 70%);
+  }
+  50% {
+    background: radial-gradient(circle, rgba(209, 58, 255, 0.7) 0%, rgba(209, 58, 255, 0.15) 70%);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes driftBg {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(10px, -10px, 0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+}
+
+@keyframes driftMid {
+  0% {
+    transform: translate3d(0, 5px, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate3d(-8px, -8px, 0);
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate3d(4px, 4px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes floatFront {
+  0% {
+    transform: translate3d(0, 10px, 0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(-4px, -12px, 0) scale(1);
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate3d(4px, 6px, 0) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Particle layer styles */
+.particles-back,
+.particles-mid,
+.particles-front {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 1.5rem;
+}
+
+.particles-back {
+  z-index: 0;
+}
+
+.particles-mid {
+  z-index: 5;
+}
+
+.particles-front {
+  z-index: 20;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform, opacity;
+}
+
+.particle-orbit {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.particle-float {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.particle-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
