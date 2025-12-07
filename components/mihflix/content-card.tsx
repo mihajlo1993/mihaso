@@ -369,7 +369,7 @@ export function ContentCard({ item, isActive, onHover, onLeave, onClick, size = 
 
       {/* Badge */}
       {item.badge && (
-        <div className="absolute top-3 left-3 z-10 rounded bg-[#E50914] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg">
+        <div className="absolute top-3 left-3 z-10 rounded bg-[#D13AFF] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg">
           {item.badge}
         </div>
       )}

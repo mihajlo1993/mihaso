@@ -5,16 +5,17 @@ import { workExperiences } from "@/lib/data"
 import { Calendar, MapPin, ChevronDown } from "lucide-react"
 import { useState, useRef } from "react"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 function PulsatingDot({ className, delay = 0 }: { className?: string; delay?: number }) {
   return (
     <span className={cn("relative inline-flex items-center justify-center", className)}>
       <motion.span
-        className="absolute h-2 w-2 rounded-full bg-[#E50914]/40"
+        className="absolute h-2 w-2 rounded-full bg-white/40"
         animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
         transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: delay / 1000 }}
       />
-      <span className="relative h-1.5 w-1.5 rounded-full bg-[#E50914]" />
+      <span className="relative h-1.5 w-1.5 rounded-full bg-white" />
     </span>
   )
 }
@@ -23,11 +24,11 @@ function CurrentBadge() {
   return (
     <span className="relative inline-flex items-center">
       {/* Animated glow behind badge */}
-      <span className="absolute inset-0 bg-[#E50914] rounded-full blur-md opacity-50 animate-pulse" />
-      <span className="relative px-2.5 py-0.5 bg-[#E50914] text-white text-xs font-medium rounded-full flex items-center gap-1.5 shadow-lg shadow-[#E50914]/30">
+      <span className="absolute inset-0 bg-white rounded-full blur-md opacity-50 animate-pulse" />
+      <span className="relative px-2.5 py-0.5 bg-white text-black text-xs font-medium rounded-full flex items-center gap-1.5 shadow-lg shadow-white/30">
         <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-75 animate-ping" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+          <span className="absolute inline-flex h-full w-full rounded-full bg-black opacity-75 animate-ping" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-black" />
         </span>
         Current
       </span>
@@ -46,7 +47,7 @@ function TimelineDot({ isActive, index }: { isActive: boolean; index: number }) 
       {/* Subtle outer glow - only for active */}
       {isActive && (
         <motion.div
-          className="absolute w-5 h-5 rounded-full bg-[#E50914]/20"
+          className="absolute w-5 h-5 rounded-full bg-white/20"
           animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.1, 0.3] }}
           transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
         />
@@ -55,7 +56,7 @@ function TimelineDot({ isActive, index }: { isActive: boolean; index: number }) 
       <div
         className={cn(
           "relative w-2.5 h-2.5 rounded-full z-10 transition-colors duration-300",
-          isActive ? "bg-[#E50914]" : "bg-gray-600",
+          isActive ? "bg-white" : "bg-gray-600",
         )}
       />
     </motion.div>
@@ -68,7 +69,7 @@ function TimelineParticles({ scrollProgress }: { scrollProgress: number }) {
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 rounded-full bg-[#E50914]"
+          className="absolute w-1 h-1 rounded-full bg-[#D13AFF]"
           style={{
             left: -2,
             top: `${(scrollProgress * 100) - 2 + i * 0.5}%`,
@@ -141,7 +142,7 @@ function ExperienceCard({
         animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
         transition={{ delay: 0.3, duration: 0.4 }}
         className={cn(
-          "absolute top-5 hidden md:block text-[#E50914] font-bold text-lg",
+          "absolute top-5 hidden md:block text-white font-bold text-lg",
           index % 2 === 0 ? "right-[-90px]" : "left-[-90px]",
         )}
       >
@@ -156,15 +157,16 @@ function ExperienceCard({
           transition={{ duration: 0.2 }}
           className={cn(
             "relative bg-gray-900/50 backdrop-blur-sm rounded-lg p-5 md:p-6 border border-gray-800 transition-all duration-300",
-            "hover:bg-gray-900/70 hover:border-[#E50914]/30 hover:shadow-xl hover:shadow-[#E50914]/10",
-            isExpanded && "border-[#E50914]/40 bg-gray-900/70",
+            "hover:bg-gray-900/70 hover:border-white/30 hover:shadow-xl hover:shadow-white/10",
+            isExpanded && "border-white/40 bg-gray-900/70",
           )}
         >
           {/* Animated border gradient on hover */}
           <motion.div
             className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{
-              background: "linear-gradient(135deg, rgba(229,9,20,0.1) 0%, transparent 50%, rgba(229,9,20,0.1) 100%)",
+              background:
+                "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%)",
             }}
           />
 
@@ -172,16 +174,16 @@ function ExperienceCard({
           <div className="relative flex items-start justify-between gap-3 mb-3">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-[#E50914] transition-colors duration-300">
+                <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-white transition-colors duration-300">
                   {exp.role}
                 </h3>
                 {exp.current && <CurrentBadge />}
               </div>
               <p className="text-base md:text-lg text-gray-300">{exp.company}</p>
-              <p className="text-sm text-[#E50914] font-medium mt-1 md:hidden">{exp.year}</p>
+              <p className="text-sm text-white font-medium mt-1 md:hidden">{exp.year}</p>
             </div>
             <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
-              <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#E50914] transition-colors flex-shrink-0 mt-1" />
+              <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors flex-shrink-0 mt-1" />
             </motion.div>
           </div>
 
@@ -225,7 +227,7 @@ function ExperienceCard({
                       transition={{ delay: i * 0.1, duration: 0.3 }}
                       className="flex items-start gap-3 text-gray-300 text-sm md:text-base"
                     >
-                      <span className="text-[#E50914] mt-1.5 flex-shrink-0">•</span>
+                      <span className="text-white mt-1.5 flex-shrink-0">•</span>
                       <span className="leading-relaxed">{contribution}</span>
                     </motion.li>
                   ))}
@@ -242,7 +244,7 @@ function ExperienceCard({
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={isExpanded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                       transition={{ delay: 0.2 + i * 0.05, duration: 0.3 }}
-                      className="px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full text-xs md:text-sm border border-gray-700 hover:border-[#E50914]/50 hover:bg-[#E50914]/10 transition-all duration-300"
+                      className="px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full text-xs md:text-sm border border-gray-700 hover:border-white/50 hover:bg-white/10 transition-all duration-300"
                     >
                       {skill}
                     </motion.span>
@@ -279,54 +281,85 @@ export function AboutView() {
       transition={{ duration: 0.22, ease: "easeOut" }}
       className="min-h-screen bg-black pt-32 pb-20"
     >
-      <div className="px-6 md:px-12 lg:px-16 max-w-5xl mx-auto">
+      <div className="px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-          className="mb-16 flex flex-col md:flex-row items-center md:items-start gap-8"
+          className="mb-24 grid md:grid-cols-2 gap-12 md:gap-16 items-center"
         >
-          {/* Profile Photo with animated glow ring */}
+          {/* Large portrait with premium effects */}
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 100 }}
-            className="relative flex-shrink-0"
+            transition={{ delay: 0.2, duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+            className="relative order-2 md:order-1"
           >
-            {/* Outer rotating glow ring */}
+            {/* Animated glow border */}
             <motion.div
-              className="absolute -inset-2 rounded-full"
+              className="absolute -inset-3 rounded-2xl opacity-50 blur-xl"
               style={{
-                background: "conic-gradient(from 0deg, #E50914, #ff3d47, #E50914, transparent, #E50914)",
+                background: "linear-gradient(135deg, #FFFFFF 0%, rgba(255,255,255,0.85) 50%, #FFFFFF 100%)",
               }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
             />
-            {/* Static glow */}
-            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#E50914] via-[#ff3d47] to-[#E50914] opacity-60 blur-sm" />
 
-            <div className="relative w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden ring-2 ring-black">
-              <img src="/images/miha-profile.png" alt="Miha Sodja" className="w-full h-full object-cover" />
+            {/* Portrait container */}
+            <div className="relative rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
+              <div className="aspect-[4/5] relative">
+                <Image
+                  src="/images/miha-portrait.png"
+                  alt="Miha Sodja - Lead Product Designer"
+                  fill
+                  priority
+                  className="object-cover"
+                />
+
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  {[...Array(8)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-1 h-1 rounded-full bg-white/40"
+                      style={{
+                        left: `${15 + (i % 4) * 25}%`,
+                        top: `${20 + Math.floor(i / 4) * 40}%`,
+                      }}
+                      animate={{
+                        y: [0, -60, 0],
+                        x: [i % 2 === 0 ? -10 : 10, 0, i % 2 === 0 ? -10 : 10],
+                        opacity: [0, 0.5, 0],
+                        scale: [0.3, 1, 0.3],
+                      }}
+                      transition={{
+                        duration: 6 + i * 0.5,
+                        repeat: Number.POSITIVE_INFINITY,
+                        delay: i * 0.8,
+                        ease: "easeOut",
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Subtle vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              </div>
             </div>
-
-            {/* 15+ years badge */}
-            <motion.div
-              initial={{ scale: 0, y: 10 }}
-              animate={{ scale: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.4, type: "spring" }}
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#E50914] text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-lg shadow-[#E50914]/30 whitespace-nowrap"
-            >
-              15+ years
-            </motion.div>
           </motion.div>
 
-          {/* Profile Info with staggered text animations */}
-          <div className="flex-1 text-center md:text-left pt-2">
+          {/* Profile info */}
+          <div className="order-1 md:order-2">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
             >
               Miha Sodja
             </motion.h1>
@@ -335,18 +368,16 @@ export function AboutView() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
-              className="text-xl md:text-2xl mb-5 text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-400 to-gray-300 font-medium"
+              className="text-2xl md:text-3xl mb-8 text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-400 to-gray-300 font-medium leading-relaxed"
             >
-              Lead Designer | Crafting Engaging
-              <br className="hidden md:block" />
-              User Experiences | Utilising AI
+              Lead Designer | Crafting Engaging User Experiences | Utilising AI
             </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="text-base text-gray-400 mb-6 max-w-2xl text-pretty leading-relaxed"
+              className="text-lg text-gray-400 mb-8 text-pretty leading-relaxed"
             >
               Senior product designer with 15+ years of experience transforming complex products into intuitive,
               conversion-focused experiences across SaaS, healthcare, self-scheduling platforms, and high-growth
@@ -357,7 +388,7 @@ export function AboutView() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5 }}
-              className="flex flex-wrap gap-2 justify-center md:justify-start"
+              className="flex flex-wrap gap-3"
             >
               {["Product Design", "UI/UX", "Design Systems", "Digital Health"].map((skill, i) => (
                 <motion.span
@@ -365,8 +396,8 @@ export function AboutView() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7 + i * 0.1, duration: 0.3 }}
-                  whileHover={{ scale: 1.05, borderColor: "rgba(229,9,20,0.5)" }}
-                  className="px-4 py-1.5 bg-transparent border border-gray-600 text-gray-300 rounded-full text-sm hover:border-[#E50914]/50 hover:text-white transition-colors cursor-default"
+                  whileHover={{ scale: 1.05, borderColor: "rgba(255, 255, 255, 0.5)" }}
+                  className="px-4 py-1.5 bg-transparent border border-gray-600 text-gray-300 rounded-full text-sm hover:border-white/50 hover:text-white transition-colors cursor-default"
                 >
                   {skill}
                 </motion.span>
@@ -375,7 +406,7 @@ export function AboutView() {
           </div>
         </motion.div>
 
-        {/* Experience Section Title */}
+        {/* Experience section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -398,21 +429,21 @@ export function AboutView() {
             style={{
               height: lineHeight,
               opacity: lineOpacity,
-              background: "linear-gradient(180deg, #E50914 0%, #E50914 90%, transparent 100%)",
+              background: "linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 90%, transparent 100%)",
             }}
           >
             {/* Subtle glow effect */}
             <div
               className="absolute inset-0 w-px"
               style={{
-                boxShadow: "0 0 8px rgba(229,9,20,0.4), 0 0 16px rgba(229,9,20,0.2)",
+                boxShadow: "0 0 8px rgba(255,255,255,0.4), 0 0 16px rgba(255,255,255,0.2)",
               }}
             />
             {/* Leading edge glow dot */}
             <motion.div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#E50914]"
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-white"
               style={{
-                boxShadow: "0 0 12px rgba(229,9,20,0.8), 0 0 24px rgba(229,9,20,0.4)",
+                boxShadow: "0 0 12px rgba(255,255,255,0.8), 0 0 24px rgba(255,255,255,0.4)",
               }}
             />
           </motion.div>
@@ -443,17 +474,16 @@ export function AboutView() {
           <motion.div
             whileHover={{ scale: 1.02, y: -4 }}
             transition={{ duration: 0.3 }}
-            className="inline-block p-8 bg-gradient-to-br from-gray-900/80 to-gray-900/40 backdrop-blur rounded-2xl border border-gray-800 relative overflow-hidden group hover:border-[#E50914]/30"
+            className="inline-block p-8 bg-gradient-to-br from-gray-900/80 to-gray-900/40 backdrop-blur rounded-2xl border border-gray-800 relative overflow-hidden group hover:border-white/30"
           >
             {/* Subtle top accent line */}
-            <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-[#E50914]/50 to-transparent" />
+            <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
 
-            {/* Minimal floating particles */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               {[...Array(4)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-0.5 h-0.5 rounded-full bg-[#E50914]/40"
+                  className="absolute w-0.5 h-0.5 rounded-full bg-[#D13AFF]/60"
                   style={{
                     left: `${15 + i * 25}%`,
                     bottom: "10%",
@@ -481,18 +511,17 @@ export function AboutView() {
                 href="mailto:miha.sodja@gmail.com"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-[#E50914] text-white rounded-lg font-medium hover:bg-[#c00812] transition-colors flex items-center justify-center gap-2 shadow-lg shadow-[#E50914]/20"
+                className="px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-white/85 transition-all shadow-lg shadow-white/20"
               >
-                <PulsatingDot />
-                Get in Touch
+                Email me
               </motion.a>
               <motion.a
-                href="#"
+                href="/#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors"
+                className="px-6 py-3 bg-transparent text-white rounded-lg font-semibold border border-white/25 hover:bg-white/8 hover:border-white/50 transition-all"
               >
-                Download Resume
+                View contact page
               </motion.a>
             </div>
           </motion.div>

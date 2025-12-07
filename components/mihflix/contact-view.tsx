@@ -69,17 +69,17 @@ function SuccessModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1.5, opacity: 0 }}
                   transition={{ delay: 0.3, duration: 1, repeat: Number.POSITIVE_INFINITY, repeatDelay: 1 }}
-                  className="absolute inset-0 rounded-full bg-green-500/30"
+                  className="absolute inset-0 rounded-full bg-white/30"
                 />
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1.3, opacity: 0 }}
                   transition={{ delay: 0.5, duration: 1, repeat: Number.POSITIVE_INFINITY, repeatDelay: 1 }}
-                  className="absolute inset-0 rounded-full bg-green-500/20"
+                  className="absolute inset-0 rounded-full bg-white/20"
                 />
 
                 {/* Main icon container */}
-                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-[0_0_40px_rgba(34,197,94,0.4)]">
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-white to-gray-200 shadow-[0_0_40px_rgba(255,255,255,0.4)]">
                   <motion.div
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
@@ -126,10 +126,10 @@ function SuccessModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="mb-6 inline-flex items-center gap-2 rounded-full bg-red-500/10 px-4 py-2 text-sm"
+                className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm"
               >
-                <div className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                <span className="text-red-400">Expected response within 17 hours</span>
+                <div className="h-2 w-2 animate-pulse rounded-full bg-white" />
+                <span className="text-white/90">Expected response within 17 hours</span>
               </motion.div>
 
               {/* Close button */}
@@ -138,7 +138,7 @@ function SuccessModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
                 onClick={onClose}
-                className="w-full rounded-lg bg-gradient-to-r from-red-600 to-red-700 px-6 py-3 font-semibold text-white transition-all hover:scale-[1.02] hover:shadow-[0_8px_24px_rgba(229,9,20,0.3)]"
+                className="w-full rounded-lg bg-white text-black px-6 py-3 font-semibold transition-all hover:scale-[1.02] hover:bg-white/85 hover:shadow-[0_8px_24px_rgba(255,255,255,0.3)]"
               >
                 Got it
               </motion.button>
@@ -241,8 +241,8 @@ export function ContactView() {
             transition={{ delay: 0.1 }}
             className="mb-8 text-center"
           >
-            <div className="mb-4 inline-flex rounded-full bg-gradient-to-br from-red-600/20 to-red-700/20 p-4">
-              <Mail className="h-8 w-8 text-red-500" />
+            <div className="mb-4 inline-flex rounded-full bg-gradient-to-br from-white/20 to-white/10 p-4">
+              <Mail className="h-8 w-8 text-white" />
             </div>
             <h1 className="mb-3 text-4xl font-bold text-white">Get in touch</h1>
             <p className="text-balance text-gray-400">
@@ -270,14 +270,14 @@ export function ContactView() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-gray-700 bg-black/50 px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
+                  className="w-full rounded-lg border border-gray-700 bg-black/50 px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-white focus:ring-2 focus:ring-white/50"
                   placeholder="Your name"
                 />
               </div>
 
               <div>
                 <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-300">
-                  Email Address <span className="text-red-500">*</span>
+                  Email Address <span className="text-white">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -290,10 +290,10 @@ export function ContactView() {
                     required
                     className={`w-full rounded-lg border bg-black/50 px-4 py-3 pr-12 text-white placeholder-gray-500 outline-none transition-all ${
                       emailTouched && !emailValidation.isValid
-                        ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
+                        ? "border-white focus:border-white focus:ring-2 focus:ring-white/50"
                         : emailTouched && emailValidation.isValid
                           ? "border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-500/50"
-                          : "border-gray-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
+                          : "border-gray-700 focus:border-white focus:ring-2 focus:ring-white/50"
                     }`}
                     placeholder="your@email.com"
                   />
@@ -314,7 +314,7 @@ export function ContactView() {
                           animate={{ scale: 1 }}
                           transition={{ type: "spring", damping: 15 }}
                         >
-                          <X className="h-5 w-5 text-red-500" />
+                          <X className="h-5 w-5 text-white" />
                         </motion.div>
                       )}
                     </div>
@@ -327,7 +327,7 @@ export function ContactView() {
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -4 }}
-                      className="mt-2 text-sm text-red-500"
+                      className="mt-2 text-sm text-white"
                     >
                       {emailValidation.message}
                     </motion.p>
@@ -347,7 +347,7 @@ export function ContactView() {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-gray-700 bg-black/50 px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
+                  className="w-full rounded-lg border border-gray-700 bg-black/50 px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-white focus:ring-2 focus:ring-white/50"
                   placeholder="Project inquiry"
                 />
               </div>
@@ -364,7 +364,7 @@ export function ContactView() {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full resize-none rounded-lg border border-gray-700 bg-black/50 px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
+                  className="w-full resize-none rounded-lg border border-gray-700 bg-black/50 px-4 py-3 text-white placeholder-gray-500 outline-none transition-all focus:border-white focus:ring-2 focus:ring-white/50"
                   placeholder="Tell me about your project..."
                 />
               </div>
@@ -376,7 +376,7 @@ export function ContactView() {
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
-                    className="rounded-lg bg-red-500/10 px-4 py-3 text-sm text-red-500"
+                    className="rounded-lg bg-white/10 px-4 py-3 text-sm text-white"
                   >
                     {error}
                   </motion.div>
@@ -388,7 +388,7 @@ export function ContactView() {
                 type="submit"
                 disabled={isSubmitting}
                 whileTap={{ scale: 0.98 }}
-                className="group relative w-full overflow-hidden rounded-lg bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 font-semibold text-white shadow-[0_8px_24px_rgba(229,9,20,0.3)] transition-all hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(229,9,20,0.4)] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100"
+                className="group relative w-full overflow-hidden rounded-lg bg-white text-black px-6 py-4 font-semibold shadow-[0_8px_24px_rgba(255,255,255,0.3)] transition-all hover:scale-[1.02] hover:bg-white/85 hover:shadow-[0_12px_32px_rgba(255,255,255,0.4)] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100"
               >
                 <span className="flex items-center justify-center gap-2">
                   {isSubmitting ? (
@@ -403,7 +403,7 @@ export function ContactView() {
                   ) : (
                     <>
                       Send message
-                      <Send className="h-4 w-4" />
+                      <Send className="h-4 w-4 text-black" />
                     </>
                   )}
                 </span>

@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         subject: `[MihFlix Contact] ${subject}`,
         html: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #333; border-bottom: 2px solid #e50914; padding-bottom: 10px;">New Contact Form Submission</h2>
+            <h2 style="color: #333; border-bottom: 2px solid #d13aff; padding-bottom: 10px;">New Contact Form Submission</h2>
             
             <div style="margin: 20px 0; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
               <p style="margin: 0 0 10px;"><strong>Name:</strong> ${name}</p>

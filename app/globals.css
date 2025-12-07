@@ -47,20 +47,19 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.05 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  /* Netflix red accent */
-  --primary: oklch(0.55 0.25 27);
+  --primary: oklch(0.66 0.28 310); /* Updated primary accent from Netflix red to premium purple (#D13AFF) */
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.15 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.15 0 0);
   --muted-foreground: oklch(0.6 0 0);
-  --accent: oklch(0.55 0.25 27);
+  --accent: oklch(0.66 0.28 310); /* Updated accent to match new purple */
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.55 0.25 27);
+  --destructive: oklch(0.66 0.28 310);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.2 0 0);
   --input: oklch(0.2 0 0);
-  --ring: oklch(0.55 0.25 27);
+  --ring: oklch(0.66 0.28 310);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -68,12 +67,12 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.1 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.55 0.25 27);
+  --sidebar-primary: oklch(0.66 0.28 310);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.2 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.2 0 0);
-  --sidebar-ring: oklch(0.55 0.25 27);
+  --sidebar-ring: oklch(0.66 0.28 310);
 }
 
 @theme inline {
@@ -164,9 +163,9 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Selection color - Netflix red */
+/* Selection color - Premium purple accent */
 ::selection {
-  background-color: #e50914;
+  background-color: #d13aff; /* Updated selection color to new accent */
   color: white;
 }
 

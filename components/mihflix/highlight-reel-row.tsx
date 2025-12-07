@@ -85,7 +85,7 @@ export function HighlightReelRow({ items, onItemClick, size = "default" }: Highl
               }}
               className={cn(
                 "relative flex-shrink-0 rounded-xl overflow-hidden cursor-pointer",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                 "transition-[filter,box-shadow] duration-200",
                 isActive
                   ? "shadow-[0_8px_32px_rgba(0,0,0,0.5)]"

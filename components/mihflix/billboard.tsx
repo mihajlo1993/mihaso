@@ -51,7 +51,7 @@ export function Billboard({ item, isVisible }: BillboardProps) {
           {showDefault ? (
             <>
               {/* Default hero content - more cinematic spacing */}
-              <p className="mb-3 text-sm font-semibold tracking-[0.2em] text-[#E50914] uppercase">Portfolio</p>
+              <p className="mb-3 text-sm font-semibold tracking-[0.2em] text-[#D13AFF] uppercase">Portfolio</p>
               <h1 className="mb-2 text-5xl font-bold tracking-tight text-white md:text-6xl lg:text-7xl">
                 {defaultBillboard.title}
               </h1>
@@ -64,7 +64,7 @@ export function Billboard({ item, isVisible }: BillboardProps) {
               <ul className="mb-10 space-y-3">
                 {defaultBillboard.bullets.map((bullet, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm text-gray-300 md:text-base">
-                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-[#E50914]" />
+                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-[#D13AFF]" />
                     {bullet}
                   </li>
                 ))}
@@ -74,7 +74,7 @@ export function Billboard({ item, isVisible }: BillboardProps) {
             <>
               {/* Selected case study content */}
               {item.badge && (
-                <span className="mb-4 inline-block rounded bg-[#E50914] px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                <span className="mb-4 inline-block rounded bg-[#D13AFF] px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
                   {item.badge}
                 </span>
               )}

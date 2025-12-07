@@ -20,8 +20,8 @@ export function MihFlixLogo({ className, size = "md", animated = false }: MihFli
     <div
       className={cn("font-bold tracking-wider select-none", sizeClasses[size], animated && "animate-pulse", className)}
     >
-      <span className="text-[#E50914]">MIHA</span>
-      <span className="text-[#E50914]">SODJA</span>
+      <span className="text-white">MIHA</span>
+      <span className="text-white">SODJA</span>
     </div>
   )
 }
