@@ -65,7 +65,7 @@ export function HighlightReelRow({ items, onItemClick, size = "default" }: Highl
   return (
     <div className="relative py-0">
       <div
-        className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
+        className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 px-6 md:px-14 lg:px-16"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {items.map((item, index) => {

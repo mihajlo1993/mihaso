@@ -369,6 +369,238 @@ html {
 }
 
 /* Premium cinematic particle animations for About hero */
+@keyframes orbit {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(var(--orbit-radius, 40%));
+  }
+  5% {
+    transform: translate(-50%, -50%) rotate(18deg) translateX(var(--orbit-radius, 40%));
+  }
+  10% {
+    transform: translate(-50%, -50%) rotate(36deg) translateX(var(--orbit-radius, 40%));
+  }
+  15% {
+    transform: translate(-50%, -50%) rotate(54deg) translateX(var(--orbit-radius, 40%));
+  }
+  20% {
+    transform: translate(-50%, -50%) rotate(72deg) translateX(var(--orbit-radius, 40%));
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(90deg) translateX(var(--orbit-radius, 40%));
+  }
+  30% {
+    transform: translate(-50%, -50%) rotate(108deg) translateX(var(--orbit-radius, 40%));
+  }
+  35% {
+    transform: translate(-50%, -50%) rotate(126deg) translateX(var(--orbit-radius, 40%));
+  }
+  40% {
+    transform: translate(-50%, -50%) rotate(144deg) translateX(var(--orbit-radius, 40%));
+  }
+  45% {
+    transform: translate(-50%, -50%) rotate(162deg) translateX(var(--orbit-radius, 40%));
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg) translateX(var(--orbit-radius, 40%));
+  }
+  55% {
+    transform: translate(-50%, -50%) rotate(198deg) translateX(var(--orbit-radius, 40%));
+  }
+  60% {
+    transform: translate(-50%, -50%) rotate(216deg) translateX(var(--orbit-radius, 40%));
+  }
+  65% {
+    transform: translate(-50%, -50%) rotate(234deg) translateX(var(--orbit-radius, 40%));
+  }
+  70% {
+    transform: translate(-50%, -50%) rotate(252deg) translateX(var(--orbit-radius, 40%));
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(270deg) translateX(var(--orbit-radius, 40%));
+  }
+  80% {
+    transform: translate(-50%, -50%) rotate(288deg) translateX(var(--orbit-radius, 40%));
+  }
+  85% {
+    transform: translate(-50%, -50%) rotate(306deg) translateX(var(--orbit-radius, 40%));
+  }
+  90% {
+    transform: translate(-50%, -50%) rotate(324deg) translateX(var(--orbit-radius, 40%));
+  }
+  95% {
+    transform: translate(-50%, -50%) rotate(342deg) translateX(var(--orbit-radius, 40%));
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(var(--orbit-radius, 40%));
+  }
+}
+
+@keyframes particlePulse {
+  0% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  10% {
+    opacity: 0.48;
+    transform: scale(1.03);
+  }
+  20% {
+    opacity: 0.56;
+    transform: scale(1.08);
+  }
+  30% {
+    opacity: 0.64;
+    transform: scale(1.15);
+  }
+  40% {
+    opacity: 0.72;
+    transform: scale(1.22);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.3);
+  }
+  60% {
+    opacity: 0.72;
+    transform: scale(1.24);
+  }
+  70% {
+    opacity: 0.64;
+    transform: scale(1.18);
+  }
+  80% {
+    opacity: 0.56;
+    transform: scale(1.1);
+  }
+  90% {
+    opacity: 0.48;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0px) translateX(0px);
+  }
+  10% {
+    transform: translateY(-4px) translateX(1px);
+  }
+  20% {
+    transform: translateY(-8px) translateX(2px);
+  }
+  30% {
+    transform: translateY(-12px) translateX(2px);
+  }
+  40% {
+    transform: translateY(-16px) translateX(1px);
+  }
+  50% {
+    transform: translateY(-20px) translateX(0px);
+  }
+  60% {
+    transform: translateY(-16px) translateX(-1px);
+  }
+  70% {
+    transform: translateY(-12px) translateX(-2px);
+  }
+  80% {
+    transform: translateY(-8px) translateX(-2px);
+  }
+  90% {
+    transform: translateY(-4px) translateX(-1px);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
+
+@keyframes particleBreathe {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  10% {
+    opacity: 0.34;
+    transform: scale(0.92);
+  }
+  20% {
+    opacity: 0.42;
+    transform: scale(0.96);
+  }
+  30% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 0.6;
+    transform: scale(1.04);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+  60% {
+    opacity: 0.6;
+    transform: scale(1.06);
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.02);
+  }
+  80% {
+    opacity: 0.42;
+    transform: scale(0.98);
+  }
+  90% {
+    opacity: 0.34;
+    transform: scale(0.94);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-4px, -6px);
+  }
+  20% {
+    transform: translate(-8px, -12px);
+  }
+  30% {
+    transform: translate(-12px, -14px);
+  }
+  40% {
+    transform: translate(-16px, -12px);
+  }
+  50% {
+    transform: translate(-20px, -10px);
+  }
+  60% {
+    transform: translate(-16px, -8px);
+  }
+  70% {
+    transform: translate(-12px, -6px);
+  }
+  80% {
+    transform: translate(-8px, -4px);
+  }
+  90% {
+    transform: translate(-4px, -2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 @keyframes orbit-slow {
   0% {
     transform: rotate(0deg) translateX(120px) rotate(0deg);
@@ -553,4 +785,118 @@ html {
 
 .particle-glow {
   animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* New premium stroke animation for portrait bottom */
+@keyframes strokeGlow {
+  0% {
+    opacity: 0.4;
+    filter: blur(0px);
+  }
+  10% {
+    opacity: 0.5;
+    filter: blur(0.5px);
+  }
+  20% {
+    opacity: 0.6;
+    filter: blur(1px);
+  }
+  30% {
+    opacity: 0.7;
+    filter: blur(1.5px);
+  }
+  40% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(2.5px);
+  }
+  60% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  70% {
+    opacity: 0.7;
+    filter: blur(1.5px);
+  }
+  80% {
+    opacity: 0.6;
+    filter: blur(1px);
+  }
+  90% {
+    opacity: 0.5;
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 0.4;
+    filter: blur(0px);
+  }
+}
+
+@keyframes strokeShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  5% {
+    background-position: -180% 0;
+  }
+  10% {
+    background-position: -160% 0;
+  }
+  15% {
+    background-position: -140% 0;
+  }
+  20% {
+    background-position: -120% 0;
+  }
+  25% {
+    background-position: -100% 0;
+  }
+  30% {
+    background-position: -80% 0;
+  }
+  35% {
+    background-position: -60% 0;
+  }
+  40% {
+    background-position: -40% 0;
+  }
+  45% {
+    background-position: -20% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+  55% {
+    background-position: 20% 0;
+  }
+  60% {
+    background-position: 40% 0;
+  }
+  65% {
+    background-position: 60% 0;
+  }
+  70% {
+    background-position: 80% 0;
+  }
+  75% {
+    background-position: 100% 0;
+  }
+  80% {
+    background-position: 120% 0;
+  }
+  85% {
+    background-position: 140% 0;
+  }
+  90% {
+    background-position: 160% 0;
+  }
+  95% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }

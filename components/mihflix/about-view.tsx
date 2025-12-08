@@ -221,40 +221,72 @@ function ParticlesFront({ mouseOffset }: { mouseOffset: { x: number; y: number }
   )
 }
 
+function PortraitStroke() {
+  return (
+    <div className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none" style={{ zIndex: 25 }}>
+      {/* Base stroke */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 20%, rgba(255, 255, 255, 0.6) 50%, rgba(255,255,255,0.3) 80%, transparent 100%)",
+          animationName: "strokeGlow",
+          animationDuration: "4s",
+          animationTimingFunction: "ease-in-out",
+          animationIterationCount: "infinite",
+        }}
+      />
+      {/* Shimmer overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, transparent 40%, rgba(209,58,255,0.8) 50%, transparent 60%, transparent 100%)",
+          backgroundSize: "200% 100%",
+          animationName: "strokeShimmer",
+          animationDuration: "6s",
+          animationTimingFunction: "linear",
+          animationIterationCount: "infinite",
+        }}
+      />
+    </div>
+  )
+}
+
 function SpectacularParticles() {
   // Orbital particles - rotate around the portrait center
-  const orbitalParticles: OrbitalParticle[] = Array.from({ length: 10 }, (_, i) => ({
+  const orbitalParticles: OrbitalParticle[] = Array.from({ length: 6 }, (_, i) => ({
     id: `orbital-${i}`,
-    angle: (i / 10) * 360,
-    orbitRadius: 35 + (i % 3) * 10, // Three orbital paths
-    size: 3 + Math.random() * 3,
-    color: i % 2 === 0 ? "rgba(255, 255, 255, 0.6)" : "rgba(209, 58, 255, 0.5)",
-    duration: 20 + (i % 3) * 5,
-    blur: 1 + Math.random(),
+    angle: (i / 6) * 360,
+    orbitRadius: 38 + (i % 2) * 8,
+    size: 2 + Math.random() * 2,
+    color: i % 2 === 0 ? "rgba(255, 255, 255, 0.5)" : "rgba(209, 58, 255, 0.4)",
+    duration: 30 + (i % 2) * 10, // Longer duration for smoother orbit
+    blur: 1,
   }))
 
   // Floating particles - varied behaviors
-  const floatingParticles: FloatingParticle[] = Array.from({ length: 12 }, (_, i) => ({
+  const floatingParticles: FloatingParticle[] = Array.from({ length: 8 }, (_, i) => ({
     id: `float-${i}`,
-    x: 10 + Math.random() * 80,
-    y: 10 + Math.random() * 80,
-    size: 2 + Math.random() * 4,
+    x: 15 + Math.random() * 70,
+    y: 15 + Math.random() * 70,
+    size: 2 + Math.random() * 3,
     color:
-      i % 3 === 0 ? "rgba(209, 58, 255, 0.6)" : i % 3 === 1 ? "rgba(255, 255, 255, 0.5)" : "rgba(139, 92, 246, 0.4)",
+      i % 3 === 0 ? "rgba(209, 58, 255, 0.5)" : i % 3 === 1 ? "rgba(255, 255, 255, 0.4)" : "rgba(139, 92, 246, 0.35)",
     animationType: i % 3,
-    delay: Math.random() * 3,
-    blur: 1 + Math.random() * 2,
+    delay: Math.random() * 2,
+    blur: 1,
   }))
 
   // Edge accent particles - diagonal drift
-  const edgeParticles: EdgeParticle[] = Array.from({ length: 6 }, (_, i) => ({
+  const edgeParticles: EdgeParticle[] = Array.from({ length: 4 }, (_, i) => ({
     id: `edge-${i}`,
-    startX: i < 3 ? 5 + Math.random() * 15 : 85 - Math.random() * 15,
-    startY: 20 + Math.random() * 60,
-    size: 2 + Math.random() * 3,
-    color: "rgba(255, 255, 255, 0.4)",
-    delay: Math.random() * 4,
-    blur: 2 + Math.random() * 2,
+    startX: i < 2 ? 8 + Math.random() * 12 : 80 - Math.random() * 12,
+    startY: 25 + Math.random() * 50,
+    size: 2 + Math.random() * 2,
+    color: "rgba(255, 255, 255, 0.35)",
+    delay: Math.random() * 3,
+    blur: 1.5,
   }))
 
   return (
@@ -296,10 +328,10 @@ function SpectacularParticles() {
               height: p.size,
               backgroundColor: p.color,
               filter: `blur(${p.blur}px)`,
-              boxShadow: `0 0 ${p.size * 3}px ${p.color}`,
+              boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
               animationName:
                 p.animationType === 0 ? "particlePulse" : p.animationType === 1 ? "particleFloat" : "particleBreathe",
-              animationDuration: `${3 + Math.random() * 2}s`,
+              animationDuration: `${5 + Math.random() * 3}s`, // Longer duration for smoother animation
               animationTimingFunction: "ease-in-out",
               animationIterationCount: "infinite",
               animationDelay: `${p.delay}s`,
@@ -320,10 +352,33 @@ function SpectacularParticles() {
               backgroundColor: p.color,
               filter: `blur(${p.blur}px)`,
               animationName: "particleDrift",
-              animationDuration: "8s",
+              animationDuration: "12s", // Longer duration for smoother drift
               animationTimingFunction: "ease-in-out",
               animationIterationCount: "infinite",
               animationDelay: `${p.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Layer B: Foreground particles */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 15 }}>
+        {floatingParticles.slice(0, 4).map((p, i) => (
+          <div
+            key={`fore-${p.id}`}
+            className="absolute rounded-full"
+            style={{
+              left: `${20 + i * 18}%`,
+              top: `${70 + (i % 2) * 10}%`,
+              width: p.size * 0.8,
+              height: p.size * 0.8,
+              backgroundColor: i % 2 === 0 ? "rgba(255, 255, 255, 0.3)" : "rgba(209, 58, 255, 0.25)",
+              filter: `blur(0.5px)`,
+              animationName: "particleFloat",
+              animationDuration: `${6 + i}s`,
+              animationTimingFunction: "ease-in-out",
+              animationIterationCount: "infinite",
+              animationDelay: `${i * 0.5}s`,
             }}
           />
         ))}
@@ -566,6 +621,8 @@ function ExperienceCard({
 export function AboutView() {
   const [expandedCards, setExpandedCards] = useState<{ [key: number]: boolean }>({})
   const heroRef = useRef<HTMLElement>(null)
+  const timelineRef = useRef<HTMLDivElement>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   const toggleCard = (index: number) => {
     setExpandedCards((prev) => ({
@@ -573,6 +630,27 @@ export function AboutView() {
       [index]: !prev[index],
     }))
   }
+
+  useState(() => {
+    const handleScroll = () => {
+      if (!timelineRef.current) return
+      const rect = timelineRef.current.getBoundingClientRect()
+      const windowHeight = window.innerHeight
+      const timelineHeight = rect.height
+
+      // Calculate how far through the timeline we've scrolled
+      const scrolledPastTop = Math.max(0, -rect.top)
+      const visibleHeight = Math.min(timelineHeight, windowHeight - Math.max(0, rect.top))
+      const progress = Math.min(1, Math.max(0, scrolledPastTop / (timelineHeight - windowHeight + 200)))
+
+      setScrollProgress(progress)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    handleScroll() // Initial calculation
+
+    return () => window.removeEventListener("scroll", handleScroll)
+  })
 
   return (
     <AnimatePresence mode="wait">
@@ -600,12 +678,13 @@ export function AboutView() {
                 className="relative order-2 md:order-1"
               >
                 <div
-                  className="aspect-[4/5] relative rounded-3xl"
+                  className="aspect-[4/5] relative"
                   style={{
-                    overflow: "hidden",
+                    overflow: "visible",
                   }}
                 >
                   <SpectacularParticles />
+                  <PortraitStroke />
                   <div className="absolute inset-0" style={{ zIndex: 10 }}>
                     <Image
                       src="/images/layer-201.png"
@@ -678,7 +757,21 @@ export function AboutView() {
             </motion.p>
           </div>
 
-          <div className="space-y-0">
+          <div ref={timelineRef} className="relative space-y-0">
+            {/* Timeline line with scroll progress */}
+            <div className="absolute left-3 md:left-1/2 top-0 bottom-0 w-px bg-gray-800" style={{ zIndex: 1 }} />
+            <motion.div
+              className="absolute left-3 md:left-1/2 top-0 w-px bg-white origin-top"
+              style={{
+                height: `${scrollProgress * 100}%`,
+                boxShadow: "0 0 8px rgba(255,255,255,0.6)",
+                zIndex: 2,
+              }}
+            />
+
+            {/* Timeline particles */}
+            <TimelineParticles scrollProgress={scrollProgress} />
+
             {workExperiences.map((exp, index) => (
               <ExperienceCard
                 key={exp.id}
