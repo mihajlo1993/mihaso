@@ -3,9 +3,9 @@
 import { useState, useCallback } from "react"
 import { ContentRow } from "./content-row"
 import { HighlightReelRow } from "./highlight-reel-row"
+import { TestimonialsRow } from "./testimonials-row"
 import { Footer } from "./footer"
 import { CaseStudyModal } from "./case-study-modal"
-import { TestimonialModal } from "./testimonial-modal"
 import { AmbientSectionWrapper } from "./ambient-section-wrapper"
 import { HeroBanner } from "./hero-banner"
 import { CertificationsSection } from "./certifications-section"
@@ -24,16 +24,8 @@ export function HomeScreen({ profile }: HomeScreenProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeFiCaseStudyOpen, setIsDeFiCaseStudyOpen] = useState(false)
   const [isTreeAppCaseStudyOpen, setIsTreeAppCaseStudyOpen] = useState(false)
-  const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false)
-  const [testimonialIndex, setTestimonialIndex] = useState(0)
 
   const otherRows = [
-    {
-      id: "testimonials",
-      title: "What Clients Say",
-      subtitle: "Real feedback from real projects",
-      items: testimonials,
-    },
     {
       id: "contact",
       title: "Contact & Links",
@@ -69,10 +61,6 @@ export function HomeScreen({ profile }: HomeScreenProps) {
       setIsDeFiCaseStudyOpen(true)
     } else if (item.id === "highlight-2") {
       setIsTreeAppCaseStudyOpen(true)
-    } else if (item.type === "testimonial") {
-      const index = testimonials.findIndex((t) => t.id === item.id)
-      setTestimonialIndex(index >= 0 ? index : 0)
-      setIsTestimonialModalOpen(true)
     } else {
       setSelectedItem(item)
       setIsModalOpen(true)
@@ -121,7 +109,22 @@ export function HomeScreen({ profile }: HomeScreenProps) {
           </AmbientSectionWrapper>
         </motion.div>
 
-        {/* Other rows (testimonials, contact) */}
+        <motion.div
+          id="testimonials"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.23,
+            duration: 0.35,
+            ease: "easeOut",
+          }}
+        >
+          <AmbientSectionWrapper>
+            <TestimonialsRow testimonials={testimonials} />
+          </AmbientSectionWrapper>
+        </motion.div>
+
+        {/* Other rows (contact) */}
         {otherRows.map((row, index) => (
           <motion.div
             key={row.id}
@@ -129,7 +132,7 @@ export function HomeScreen({ profile }: HomeScreenProps) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 0.23 + index * 0.08,
+              delay: 0.31 + index * 0.08,
               duration: 0.35,
               ease: "easeOut",
             }}
@@ -144,7 +147,7 @@ export function HomeScreen({ profile }: HomeScreenProps) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
-            delay: 0.23 + otherRows.length * 0.08,
+            delay: 0.31 + otherRows.length * 0.08,
             duration: 0.35,
             ease: "easeOut",
           }}
@@ -156,14 +159,6 @@ export function HomeScreen({ profile }: HomeScreenProps) {
       <Footer />
 
       <CaseStudyModal item={selectedItem} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
-      <TestimonialModal
-        testimonials={testimonials}
-        currentIndex={testimonialIndex}
-        isOpen={isTestimonialModalOpen}
-        onClose={() => setIsTestimonialModalOpen(false)}
-        onNavigate={setTestimonialIndex}
-      />
 
       <DeFiCaseStudy isOpen={isDeFiCaseStudyOpen} onClose={() => setIsDeFiCaseStudyOpen(false)} />
 
