@@ -1,13 +1,11 @@
 "use client"
 
-import type React from "react"
-
 import { motion, AnimatePresence, useInView } from "framer-motion"
 import { useState, useRef, useMemo } from "react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { workExperiences } from "@/lib/data"
-import { ChevronDown, Sparkles, Zap } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 
 interface Particle {
   id: number
@@ -49,6 +47,42 @@ interface EdgeParticle {
   color: string
   delay: number
   blur: number
+}
+
+interface BackgroundParticle {
+  id: string
+  x: number
+  y: number
+  size: number
+  color: string
+  blur: number
+  duration: number
+  delay: number
+  isLensDust?: boolean
+  rotation?: number
+}
+
+interface MidgroundParticle {
+  id: string
+  x: number
+  y: number
+  size: number
+  color: string
+  blur: number
+  duration: number
+  delay: number
+  hasTwinkle?: boolean
+}
+
+interface ForegroundParticle {
+  id: string
+  x: number
+  y: number
+  size: number
+  color: string
+  blur: number
+  duration: number
+  delay: number
 }
 
 function generateBackgroundParticles(): Particle[] {
@@ -221,103 +255,114 @@ function ParticlesFront({ mouseOffset }: { mouseOffset: { x: number; y: number }
   )
 }
 
-function PortraitStroke() {
-  return (
-    <div className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none" style={{ zIndex: 25 }}>
-      {/* Base stroke */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 20%, rgba(255, 255, 255, 0.6) 50%, rgba(255,255,255,0.3) 80%, transparent 100%)",
-          animationName: "strokeGlow",
-          animationDuration: "4s",
-          animationTimingFunction: "ease-in-out",
-          animationIterationCount: "infinite",
-        }}
-      />
-      {/* Shimmer overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, transparent 40%, rgba(209,58,255,0.8) 50%, transparent 60%, transparent 100%)",
-          backgroundSize: "200% 100%",
-          animationName: "strokeShimmer",
-          animationDuration: "6s",
-          animationTimingFunction: "linear",
-          animationIterationCount: "infinite",
-        }}
-      />
-    </div>
-  )
-}
+function CinematicParticles() {
+  const backgroundParticles = useMemo<BackgroundParticle[]>(() => {
+    const particles: BackgroundParticle[] = []
+    for (let i = 0; i < 14; i++) {
+      const isLeftEdge = i < 4
+      const isRightEdge = i >= 4 && i < 8
+      particles.push({
+        id: `bg-circle-${i}`,
+        x: isLeftEdge ? 5 + Math.random() * 20 : isRightEdge ? 75 + Math.random() * 20 : 25 + Math.random() * 50,
+        y: 10 + Math.random() * 80,
+        size: 2 + Math.random() * 3,
+        color:
+          i % 3 === 0
+            ? "rgba(255, 255, 255, 0.35)"
+            : i % 3 === 1
+              ? "rgba(200, 190, 220, 0.3)"
+              : "rgba(180, 170, 200, 0.25)",
+        blur: 2 + Math.random() * 2,
+        duration: 18 + Math.random() * 8,
+        delay: Math.random() * 5,
+      })
+    }
+    for (let i = 0; i < 6; i++) {
+      particles.push({
+        id: `bg-dust-${i}`,
+        x: 10 + Math.random() * 80,
+        y: 20 + Math.random() * 60,
+        size: 1.5 + Math.random() * 2,
+        color: "rgba(255, 255, 255, 0.2)",
+        blur: 1.5,
+        duration: 20 + Math.random() * 10,
+        delay: Math.random() * 8,
+        isLensDust: true,
+        rotation: Math.random() * 45,
+      })
+    }
+    return particles
+  }, [])
 
-function SpectacularParticles() {
-  // Orbital particles - rotate around the portrait center
-  const orbitalParticles: OrbitalParticle[] = Array.from({ length: 6 }, (_, i) => ({
-    id: `orbital-${i}`,
-    angle: (i / 6) * 360,
-    orbitRadius: 38 + (i % 2) * 8,
-    size: 2 + Math.random() * 2,
-    color: i % 2 === 0 ? "rgba(255, 255, 255, 0.5)" : "rgba(209, 58, 255, 0.4)",
-    duration: 30 + (i % 2) * 10, // Longer duration for smoother orbit
-    blur: 1,
-  }))
+  const midgroundParticles = useMemo<MidgroundParticle[]>(() => {
+    return Array.from({ length: 10 }, (_, i) => ({
+      id: `mid-${i}`,
+      x: 15 + Math.random() * 70,
+      y: 15 + Math.random() * 70,
+      size: 3 + Math.random() * 4,
+      color:
+        i % 3 === 0
+          ? "rgba(255, 255, 255, 0.4)"
+          : i % 3 === 1
+            ? "rgba(210, 200, 230, 0.35)"
+            : "rgba(190, 180, 210, 0.3)",
+      blur: 1 + Math.random(),
+      duration: 12 + Math.random() * 6,
+      delay: Math.random() * 4,
+      hasTwinkle: i % 3 === 0,
+    }))
+  }, [])
 
-  // Floating particles - varied behaviors
-  const floatingParticles: FloatingParticle[] = Array.from({ length: 8 }, (_, i) => ({
-    id: `float-${i}`,
-    x: 15 + Math.random() * 70,
-    y: 15 + Math.random() * 70,
-    size: 2 + Math.random() * 3,
-    color:
-      i % 3 === 0 ? "rgba(209, 58, 255, 0.5)" : i % 3 === 1 ? "rgba(255, 255, 255, 0.4)" : "rgba(139, 92, 246, 0.35)",
-    animationType: i % 3,
-    delay: Math.random() * 2,
-    blur: 1,
-  }))
-
-  // Edge accent particles - diagonal drift
-  const edgeParticles: EdgeParticle[] = Array.from({ length: 4 }, (_, i) => ({
-    id: `edge-${i}`,
-    startX: i < 2 ? 8 + Math.random() * 12 : 80 - Math.random() * 12,
-    startY: 25 + Math.random() * 50,
-    size: 2 + Math.random() * 2,
-    color: "rgba(255, 255, 255, 0.35)",
-    delay: Math.random() * 3,
-    blur: 1.5,
-  }))
+  const foregroundParticles = useMemo<ForegroundParticle[]>(() => {
+    const safeZones = [
+      { xMin: 5, xMax: 25, yMin: 40, yMax: 95 },
+      { xMin: 75, xMax: 95, yMin: 40, yMax: 95 },
+      { xMin: 20, xMax: 80, yMin: 75, yMax: 95 },
+    ]
+    return Array.from({ length: 8 }, (_, i) => {
+      const zone = safeZones[i % safeZones.length]
+      return {
+        id: `front-${i}`,
+        x: zone.xMin + Math.random() * (zone.xMax - zone.xMin),
+        y: zone.yMin + Math.random() * (zone.yMax - zone.yMin),
+        size: 1.5 + Math.random() * 2,
+        color: i % 2 === 0 ? "rgba(255, 255, 255, 0.5)" : "rgba(220, 210, 240, 0.4)",
+        blur: 0.5 + Math.random() * 0.5,
+        duration: 8 + Math.random() * 4,
+        delay: Math.random() * 3,
+      }
+    })
+  }, [])
 
   return (
     <>
-      {/* Layer A: Background particles */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 5 }}>
-        {/* Orbital particles */}
-        {orbitalParticles.map((p) => (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl" style={{ zIndex: 0 }}>
+        {backgroundParticles.map((p) => (
           <div
             key={p.id}
-            className="absolute left-1/2 top-1/2 rounded-full"
-            style={
-              {
-                width: p.size,
-                height: p.size,
-                backgroundColor: p.color,
-                filter: `blur(${p.blur}px)`,
-                boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
-                animationName: "orbit",
-                animationDuration: `${p.duration}s`,
-                animationTimingFunction: "linear",
-                animationIterationCount: "infinite",
-                "--orbit-radius": `${p.orbitRadius}%`,
-                "--orbit-angle": `${p.angle}deg`,
-              } as React.CSSProperties
-            }
+            className="absolute"
+            style={{
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              width: p.isLensDust ? p.size * 3 : p.size,
+              height: p.size,
+              backgroundColor: p.color,
+              borderRadius: p.isLensDust ? "50% / 25%" : "50%",
+              filter: `blur(${p.blur}px)`,
+              boxShadow: `0 0 ${p.size * 3}px ${p.color}`,
+              transform: p.isLensDust ? `rotate(${p.rotation}deg)` : undefined,
+              animationName: p.isLensDust ? "lensDust" : "cinematicDriftBg",
+              animationDuration: `${p.duration}s`,
+              animationTimingFunction: "ease-in-out",
+              animationIterationCount: "infinite",
+              animationDelay: `${p.delay}s`,
+            }}
           />
         ))}
+      </div>
 
-        {/* Floating particles */}
-        {floatingParticles.map((p) => (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl" style={{ zIndex: 5 }}>
+        {midgroundParticles.map((p) => (
           <div
             key={p.id}
             className="absolute rounded-full"
@@ -329,30 +374,8 @@ function SpectacularParticles() {
               backgroundColor: p.color,
               filter: `blur(${p.blur}px)`,
               boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
-              animationName:
-                p.animationType === 0 ? "particlePulse" : p.animationType === 1 ? "particleFloat" : "particleBreathe",
-              animationDuration: `${5 + Math.random() * 3}s`, // Longer duration for smoother animation
-              animationTimingFunction: "ease-in-out",
-              animationIterationCount: "infinite",
-              animationDelay: `${p.delay}s`,
-            }}
-          />
-        ))}
-
-        {/* Edge accent particles */}
-        {edgeParticles.map((p) => (
-          <div
-            key={p.id}
-            className="absolute rounded-full"
-            style={{
-              left: `${p.startX}%`,
-              top: `${p.startY}%`,
-              width: p.size,
-              height: p.size,
-              backgroundColor: p.color,
-              filter: `blur(${p.blur}px)`,
-              animationName: "particleDrift",
-              animationDuration: "12s", // Longer duration for smoother drift
+              animationName: p.hasTwinkle ? "twinkle" : "cinematicDriftMid",
+              animationDuration: `${p.duration}s`,
               animationTimingFunction: "ease-in-out",
               animationIterationCount: "infinite",
               animationDelay: `${p.delay}s`,
@@ -361,24 +384,24 @@ function SpectacularParticles() {
         ))}
       </div>
 
-      {/* Layer B: Foreground particles */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 15 }}>
-        {floatingParticles.slice(0, 4).map((p, i) => (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl" style={{ zIndex: 20 }}>
+        {foregroundParticles.map((p) => (
           <div
-            key={`fore-${p.id}`}
+            key={p.id}
             className="absolute rounded-full"
             style={{
-              left: `${20 + i * 18}%`,
-              top: `${70 + (i % 2) * 10}%`,
-              width: p.size * 0.8,
-              height: p.size * 0.8,
-              backgroundColor: i % 2 === 0 ? "rgba(255, 255, 255, 0.3)" : "rgba(209, 58, 255, 0.25)",
-              filter: `blur(0.5px)`,
-              animationName: "particleFloat",
-              animationDuration: `${6 + i}s`,
+              left: `${p.x}%`,
+              top: `${p.y}%`,
+              width: p.size,
+              height: p.size,
+              backgroundColor: p.color,
+              filter: `blur(${p.blur}px)`,
+              boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
+              animationName: "cinematicFloatFront",
+              animationDuration: `${p.duration}s`,
               animationTimingFunction: "ease-in-out",
               animationIterationCount: "infinite",
-              animationDelay: `${i * 0.5}s`,
+              animationDelay: `${p.delay}s`,
             }}
           />
         ))}
@@ -547,20 +570,21 @@ function ExperienceCard({
           </motion.div>
         </div>
 
-        <div className="relative flex flex-col md:flex-row md:flex-wrap md:items-center gap-2 md:gap-4 text-sm text-gray-400 mb-4">
-          <div className="flex items-center gap-1.5">
-            <motion.div className="w-4 h-4 flex-shrink-0">
-              <Sparkles />
-            </motion.div>
-            <span>{exp.period}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <motion.div className="w-4 h-4 flex-shrink-0">
-              <Zap />
-            </motion.div>
-            <span>{exp.location}</span>
-          </div>
-          <span className="hidden md:inline text-gray-500">•</span>
+        <div className="relative flex items-center flex-wrap gap-2 text-sm text-white/80 mb-4">
+          <span>{exp.period}</span>
+          {/* Location chip - render if location exists */}
+          {exp.location && (
+            <span className="px-2.5 py-0.5 border border-white/20 rounded-full text-xs text-white/85 bg-transparent">
+              {exp.location}
+            </span>
+          )}
+          {/* Remote chip - only show if location is "Remote" */}
+          {exp.location === "Remote"
+            ? null
+            : // For non-remote locations, we don't add a separate Remote chip
+              // If the data had a separate remote field, we would check it here
+              null}
+          <span className="text-gray-500">•</span>
           <span className="text-gray-300 font-medium">{exp.duration}</span>
         </div>
 
@@ -638,7 +662,6 @@ export function AboutView() {
       const windowHeight = window.innerHeight
       const timelineHeight = rect.height
 
-      // Calculate how far through the timeline we've scrolled
       const scrolledPastTop = Math.max(0, -rect.top)
       const visibleHeight = Math.min(timelineHeight, windowHeight - Math.max(0, rect.top))
       const progress = Math.min(1, Math.max(0, scrolledPastTop / (timelineHeight - windowHeight + 200)))
@@ -647,7 +670,7 @@ export function AboutView() {
     }
 
     window.addEventListener("scroll", handleScroll)
-    handleScroll() // Initial calculation
+    handleScroll()
 
     return () => window.removeEventListener("scroll", handleScroll)
   })
@@ -677,15 +700,10 @@ export function AboutView() {
                 transition={{ delay: 0.2, duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
                 className="relative order-2 md:order-1"
               >
-                <div
-                  className="aspect-[4/5] relative"
-                  style={{
-                    overflow: "visible",
-                  }}
-                >
-                  <SpectacularParticles />
-                  <PortraitStroke />
-                  <div className="absolute inset-0" style={{ zIndex: 10 }}>
+                <div className="relative w-full max-w-[600px] mx-auto">
+                  <CinematicParticles />
+
+                  <div className="relative pb-4 image-soft-mask aspect-[4/5]" style={{ zIndex: 10 }}>
                     <Image
                       src="/images/layer-201.png"
                       alt="Miha Sodja - Lead Product Designer"
@@ -758,7 +776,6 @@ export function AboutView() {
           </div>
 
           <div ref={timelineRef} className="relative space-y-0">
-            {/* Timeline line with scroll progress */}
             <div className="absolute left-3 md:left-1/2 top-0 bottom-0 w-px bg-gray-800" style={{ zIndex: 1 }} />
             <motion.div
               className="absolute left-3 md:left-1/2 top-0 w-px bg-white origin-top"
@@ -769,7 +786,6 @@ export function AboutView() {
               }}
             />
 
-            {/* Timeline particles */}
             <TimelineParticles scrollProgress={scrollProgress} />
 
             {workExperiences.map((exp, index) => (
