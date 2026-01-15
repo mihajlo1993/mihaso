@@ -11,6 +11,7 @@ import { HeroBanner } from "./hero-banner"
 import { CertificationsSection } from "./certifications-section"
 import { DeFiCaseStudy } from "./defi-case-study"
 import { TreeAppCaseStudy } from "./treeapp-case-study"
+import { SimpleDoctorCaseStudy } from "./simple-doctor-case-study"
 import { highlightReel, testimonials, contactLinks, certifications, type ContentItem, type Profile } from "@/lib/data"
 import { motion } from "framer-motion"
 
@@ -24,6 +25,7 @@ export function HomeScreen({ profile }: HomeScreenProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeFiCaseStudyOpen, setIsDeFiCaseStudyOpen] = useState(false)
   const [isTreeAppCaseStudyOpen, setIsTreeAppCaseStudyOpen] = useState(false)
+  const [isSimpleDoctorCaseStudyOpen, setIsSimpleDoctorCaseStudyOpen] = useState(false)
 
   const otherRows = [
     {
@@ -43,6 +45,8 @@ export function HomeScreen({ profile }: HomeScreenProps) {
       setIsDeFiCaseStudyOpen(true)
     } else if (item.id === "highlight-2") {
       setIsTreeAppCaseStudyOpen(true)
+    } else if (item.id === "highlight-3") {
+      setIsSimpleDoctorCaseStudyOpen(true)
     }
   }, [])
 
@@ -61,6 +65,8 @@ export function HomeScreen({ profile }: HomeScreenProps) {
       setIsDeFiCaseStudyOpen(true)
     } else if (item.id === "highlight-2") {
       setIsTreeAppCaseStudyOpen(true)
+    } else if (item.id === "highlight-3") {
+      setIsSimpleDoctorCaseStudyOpen(true)
     } else {
       setSelectedItem(item)
       setIsModalOpen(true)
@@ -124,7 +130,6 @@ export function HomeScreen({ profile }: HomeScreenProps) {
           </AmbientSectionWrapper>
         </motion.div>
 
-        {/* Other rows (contact) */}
         {otherRows.map((row, index) => (
           <motion.div
             key={row.id}
@@ -163,6 +168,11 @@ export function HomeScreen({ profile }: HomeScreenProps) {
       <DeFiCaseStudy isOpen={isDeFiCaseStudyOpen} onClose={() => setIsDeFiCaseStudyOpen(false)} />
 
       <TreeAppCaseStudy isOpen={isTreeAppCaseStudyOpen} onClose={() => setIsTreeAppCaseStudyOpen(false)} />
+
+      <SimpleDoctorCaseStudy
+        isOpen={isSimpleDoctorCaseStudyOpen}
+        onClose={() => setIsSimpleDoctorCaseStudyOpen(false)}
+      />
     </motion.div>
   )
 }

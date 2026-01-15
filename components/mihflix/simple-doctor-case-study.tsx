@@ -1,38 +1,40 @@
 "use client"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { cn } from "@/lib/utils"
-import { X, Layers, Eye, Accessibility, ExternalLink } from "lucide-react"
+import { X, Layers, Eye, Shield, Zap } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 
-interface TreeAppCaseStudyProps {
+interface SimpleDoctorCaseStudyProps {
   isOpen: boolean
   onClose: () => void
 }
 
 const sections = [
   { id: "overview", title: "Overview" },
+  { id: "problem-goals", title: "Challenge" },
   { id: "research", title: "Research" },
   { id: "strategy", title: "Strategy" },
   { id: "design", title: "Design" },
   { id: "outcomes", title: "Outcome", isHighlighted: true },
 ]
 
-const THEME_COLOR = "#22C55E"
-const THEME_COLOR_LIGHT = "#4ADE80"
+const THEME_COLOR = "#06B6D4"
+const THEME_COLOR_LIGHT = "#22D3EE"
 
-export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
+export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudyProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
   const [activeSection, setActiveSection] = useState<string>("overview")
   const [scrollY, setScrollY] = useState(0)
 
   const handleScroll = () => {
-    setScrollY(scrollRef.current?.scrollTop || 0)
+    if (!scrollRef.current) return
 
-    // Find active section
+    setScrollY(scrollRef.current.scrollTop)
+
     for (let i = sections.length - 1; i >= 0; i--) {
-      const el = document.getElementById(`treeapp-${sections[i].id}`)
+      const el = document.getElementById(`sod-${sections[i].id}`)
       if (el) {
         const rect = el.getBoundingClientRect()
         if (rect.top <= 200) {
@@ -51,7 +53,6 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
     return () => container.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
@@ -65,7 +66,6 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
     }
   }, [isOpen])
 
-  // ESC to close
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
@@ -75,7 +75,7 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
   }, [onClose])
 
   const scrollToSection = useCallback((sectionId: string) => {
-    const el = document.getElementById(`treeapp-${sectionId}`)
+    const el = document.getElementById(`sod-${sectionId}`)
     if (el && scrollRef.current) {
       const top = el.offsetTop - 120
       scrollRef.current.scrollTo({ top, behavior: "smooth" })
@@ -122,8 +122,8 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                 {/* Hero Image with Parallax */}
                 <div className="absolute inset-0" style={{ transform: `translateY(${parallaxY}px)` }}>
                   <Image
-                    src="/images/treeapp-cover.png"
-                    alt="TreeApp Forest Background"
+                    src="/images/simple-doctor-cover.jpg"
+                    alt="Simple Online Doctor"
                     fill
                     className="object-cover object-center scale-110"
                     priority
@@ -146,7 +146,7 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                       transition={{ duration: 0.6, delay: 0.2 }}
                       className="mb-4 flex flex-wrap gap-2"
                     >
-                      {["Mobile App", "UX Design", "Sustainability"].map((tag) => (
+                      {["Healthcare", "Rebrand", "UX/UI"].map((tag) => (
                         <span
                           key={tag}
                           className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm"
@@ -163,9 +163,9 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                       transition={{ duration: 0.7, delay: 0.3 }}
                       className="mb-3 text-3xl font-bold leading-tight tracking-tight text-white md:text-4xl lg:text-5xl"
                     >
-                      Users Spend
+                      Conversions Increased
                       <br />
-                      <span style={{ color: THEME_COLOR }}>33% Longer</span> in App
+                      <span style={{ color: THEME_COLOR }}>156%</span>
                     </motion.h1>
 
                     {/* Subtitle */}
@@ -175,7 +175,7 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                       transition={{ duration: 0.6, delay: 0.4 }}
                       className="mb-6 max-w-2xl text-base text-white/70 md:text-lg"
                     >
-                      Boosting mobile engagement through accessibility improvements and navigation redesign
+                      Complete rebrand and digital platform launch for Simple Online Doctor telehealth service
                     </motion.p>
                   </div>
                 </div>
@@ -210,20 +210,20 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
               {/* Content sections */}
               <div className="px-6 md:px-10 lg:px-14 py-12 space-y-20">
                 {/* Overview Section */}
-                <section id="treeapp-overview" className="scroll-mt-24">
+                <section id="sod-overview" className="scroll-mt-24">
                   <div className="max-w-4xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Overview</h2>
                     <p className="text-white/70 text-lg leading-relaxed mb-8">
-                      TreeApp is an environmental impact app that plants trees when users make eco-friendly choices. As
-                      Design Lead, I overhauled the mobile experience to improve accessibility, streamline navigation,
-                      and increase user engagement with the tree-planting mission.
+                      Simple Online Doctor is a telehealth platform connecting patients with licensed physicians for
+                      remote consultations. I led the complete rebrand and digital platform redesign, transforming a
+                      dated service into a modern, trustworthy healthcare experience.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       {[
-                        { label: "Role", value: "Design Lead" },
-                        { label: "Timeline", value: "1 year 11 months" },
-                        { label: "Platform", value: "iOS & Android" },
+                        { label: "Role", value: "Lead Product Designer" },
+                        { label: "Timeline", value: "8 months" },
+                        { label: "Platform", value: "Web & Mobile" },
                       ].map((item) => (
                         <div key={item.label} className="p-5 rounded-xl bg-white/5 border border-white/10">
                           <p className="text-white/50 text-sm mb-1">{item.label}</p>
@@ -234,21 +234,52 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                   </div>
                 </section>
 
-                {/* Research Section */}
-                <section id="treeapp-research" className="scroll-mt-24">
+                {/* Challenge Section */}
+                <section id="sod-problem-goals" className="scroll-mt-24">
                   <div className="max-w-4xl mx-auto">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Research Findings</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">The Challenge</h2>
                     <p className="text-white/70 text-lg leading-relaxed mb-8">
-                      User testing and analytics revealed critical usability issues that were impacting engagement and
-                      retention.
+                      The existing platform suffered from low trust signals, confusing user flows, and a dated visual
+                      identity that undermined the professionalism of the medical service.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {[
+                        {
+                          icon: Shield,
+                          title: "Trust Issues",
+                          desc: "Users hesitant to share medical info with dated-looking platform",
+                        },
+                        {
+                          icon: Zap,
+                          title: "High Bounce Rate",
+                          desc: "67% of visitors left without completing registration",
+                        },
+                      ].map((item, i) => (
+                        <div key={i} className="p-6 rounded-xl bg-white/5 border border-white/10">
+                          <item.icon className="h-8 w-8 mb-4" style={{ color: THEME_COLOR }} />
+                          <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
+                          <p className="text-white/60">{item.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                {/* Research Section */}
+                <section id="sod-research" className="scroll-mt-24">
+                  <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Research Insights</h2>
+                    <p className="text-white/70 text-lg leading-relaxed mb-8">
+                      Competitive analysis and user interviews revealed what patients truly need from telehealth.
                     </p>
 
                     <div className="space-y-4">
                       {[
-                        "80% of users couldn't find key settings within the hamburger menu",
-                        "WCAG accessibility failures identified in 12 areas",
-                        "Tree-planting progress was buried 3 taps deep",
-                        "Session duration averaged only 45 seconds",
+                        "Trust signals (certifications, reviews) are critical for healthcare conversions",
+                        "Users want to see doctor credentials before booking",
+                        "Simplified symptom checkers increase consultation completion",
+                        "Clear pricing transparency reduces abandonment",
                       ].map((insight, i) => (
                         <div
                           key={i}
@@ -270,22 +301,30 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                 </section>
 
                 {/* Strategy Section */}
-                <section id="treeapp-strategy" className="scroll-mt-24">
+                <section id="sod-strategy" className="scroll-mt-24">
                   <div className="max-w-4xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Design Strategy</h2>
                     <p className="text-white/70 text-lg leading-relaxed mb-8">
-                      Our approach focused on three key pillars to transform the user experience.
+                      A three-pronged approach to rebuild trust and streamline the patient journey.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       {[
                         {
-                          icon: Accessibility,
-                          title: "Accessibility First",
-                          desc: "WCAG 2.1 AA compliance across all screens",
+                          icon: Shield,
+                          title: "Trust First",
+                          desc: "Prominent certifications, doctor profiles, and patient reviews",
                         },
-                        { icon: Layers, title: "Simplified IA", desc: "Flattened navigation from 4 levels to 2" },
-                        { icon: Eye, title: "Progress Visibility", desc: "Impact metrics front and center" },
+                        {
+                          icon: Layers,
+                          title: "Simplified Flow",
+                          desc: "3-step booking process with progress indication",
+                        },
+                        {
+                          icon: Eye,
+                          title: "Modern Identity",
+                          desc: "Clean, clinical aesthetic that conveys professionalism",
+                        },
                       ].map((item, i) => (
                         <div key={i} className="p-6 rounded-xl bg-white/5 border border-white/10">
                           <item.icon className="h-8 w-8 mb-4" style={{ color: THEME_COLOR }} />
@@ -298,28 +337,31 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                 </section>
 
                 {/* Design Section */}
-                <section id="treeapp-design" className="scroll-mt-24">
+                <section id="sod-design" className="scroll-mt-24">
                   <div className="max-w-4xl mx-auto">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Key Design Decisions</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Key Design Elements</h2>
                     <p className="text-white/70 text-lg leading-relaxed mb-8">
-                      Every change was validated through user testing before implementation.
+                      Every design decision was guided by building patient confidence.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {[
                         {
-                          title: "Tab Bar Navigation",
-                          desc: "Replaced hamburger menu with persistent tab bar showing 5 core sections",
+                          title: "Doctor Profiles",
+                          desc: "Rich profiles with photos, credentials, specialties, and patient reviews",
                         },
                         {
-                          title: "Icon + Label Pattern",
-                          desc: "All navigation items include both icon and label for clarity",
+                          title: "Symptom Checker",
+                          desc: "Guided questionnaire that matches patients with appropriate specialists",
                         },
                         {
-                          title: "Impact Dashboard",
-                          desc: "New home screen showing trees planted, CO2 offset, and streak",
+                          title: "Transparent Pricing",
+                          desc: "Clear cost breakdown before booking with insurance compatibility",
                         },
-                        { title: "High Contrast Mode", desc: "Optional high contrast theme for vision-impaired users" },
+                        {
+                          title: "Secure Messaging",
+                          desc: "HIPAA-compliant chat with end-to-end encryption indicators",
+                        },
                       ].map((item, i) => (
                         <div key={i} className="p-6 rounded-xl bg-white/5 border border-white/10">
                           <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
@@ -331,18 +373,18 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
                 </section>
 
                 {/* Outcomes Section */}
-                <section id="treeapp-outcomes" className="scroll-mt-24">
+                <section id="sod-outcomes" className="scroll-mt-24">
                   <div className="max-w-4xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Results & Impact</h2>
                     <p className="text-white/70 text-lg leading-relaxed mb-8">
-                      The redesigned app launched to overwhelmingly positive feedback from users and stakeholders.
+                      The redesigned platform exceeded all success metrics within the first quarter.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                       {[
-                        { metric: "+33%", label: "Session duration increase" },
-                        { metric: "100%", label: "WCAG 2.1 AA compliance" },
-                        { metric: "+28%", label: "Daily active users" },
+                        { metric: "+156%", label: "Conversion rate increase" },
+                        { metric: "-42%", label: "Bounce rate reduction" },
+                        { metric: "4.8/5", label: "Patient satisfaction" },
                       ].map((item, i) => (
                         <div
                           key={i}
@@ -359,19 +401,10 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
 
                     {/* CTA */}
                     <div className="flex flex-wrap gap-4 justify-center pt-6">
-                      <a
-                        href="https://www.thetreeapp.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition-all hover:opacity-90"
-                        style={{ backgroundColor: THEME_COLOR }}
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        Visit TreeApp
-                      </a>
                       <button
                         onClick={onClose}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-all"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition-all hover:opacity-90"
+                        style={{ backgroundColor: THEME_COLOR }}
                       >
                         Close Case Study
                       </button>

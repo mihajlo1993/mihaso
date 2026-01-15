@@ -639,6 +639,15 @@ export const highlightReel: ContentItem[] = [
     gradientType: "green-teal",
     thumbnailUrl: "/images/treeapp-cover.png",
   },
+  {
+    id: "highlight-3",
+    type: "highlight",
+    title: "Simple Online Doctor",
+    shortDescription: "Healthcare rebrand & digital launch",
+    tags: ["Healthcare", "Rebrand", "UX"],
+    gradientType: "cyan-blue",
+    thumbnailUrl: "/images/simple-doctor-cover.jpg",
+  },
 ]
 
 export const skills: ContentItem[] = [
