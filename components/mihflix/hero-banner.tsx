@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect } from "react"
 import { motion } from "framer-motion"
 
 interface HeroBannerProps {
@@ -8,37 +8,48 @@ interface HeroBannerProps {
   onGetInTouch: () => void
 }
 
-type HeroSlide = {
-  type: "video"
-  src: string
-}
-
-const heroSlides: HeroSlide[] = [
-  {
-    type: "video",
-    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Video_Enhanced_for_Mobile_UI-kTEWcysxZO4TYO2nJw7SWoNvBlLxSR.mp4",
-  },
-]
-
 const chips = ["Product Design", "UI/UX", "Design Systems", "Digital Health"]
 
 export function HeroBanner({ onViewWork, onGetInTouch }: HeroBannerProps) {
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (!e.origin.includes("vidzflow")) return
+      if (e.data.eventType === "videoReady") {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach((entry) => {
+            if (
+              entry.isIntersecting &&
+              entry.target.getAttribute("data-video-id") === String(e.data.videoId)
+            ) {
+              const iframe = entry.target.querySelector("iframe")
+              if (iframe) {
+                iframe.contentWindow?.postMessage("playerPlay", "*")
+                obs.unobserve(entry.target)
+              }
+            }
+          })
+        })
+        const el = document.querySelector(`div[data-video-id="${e.data.videoId}"]`)
+        if (el) observer.observe(el)
+      }
+    }
+    window.addEventListener("message", handleMessage)
+    return () => window.removeEventListener("message", handleMessage)
+  }, [])
 
   return (
     <div className="relative w-full h-[85vh] min-h-[500px] max-h-[900px] md:h-[70vh] md:max-h-[800px] overflow-hidden">
-      <div className="absolute inset-0">
-        <video
-          src={heroSlides[0].src}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{
-            transform: "scale(1.2)",
-            transformOrigin: "center center",
-          }}
+      <div className="absolute inset-0" data-video-id="15103">
+        <iframe
+          width="100%"
+          height="100%"
+          src="https://app.vidzflow.com/v/XaXNYRQzTC?dq=1080&ap=false&muted=true&loop=false&ctp=false&bv=false&piv=true&playsinline=false&bc=%234E5FFD&controls=false"
+          title="Hero Video"
+          className="w-full h-full object-cover scale-125 origin-center"
+          style={{ aspectRatio: "16/9" }}
+          frameBorder="0"
+          scrolling="no"
+          allow="fullscreen"
         />
       </div>
 
@@ -106,18 +117,6 @@ export function HeroBanner({ onViewWork, onGetInTouch }: HeroBannerProps) {
             </div>
           </motion.div>
         </div>
-      </div>
-
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 sm:bottom-6 sm:left-auto sm:right-12 sm:translate-x-0 z-10">
-        {heroSlides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlideIndex(index)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              index === currentSlideIndex ? "bg-white w-6" : "bg-white/40 hover:bg-white/60 w-2"
-            }`}
-          />
-        ))}
       </div>
     </div>
   )
