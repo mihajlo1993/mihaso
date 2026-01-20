@@ -301,6 +301,20 @@ export function DeFiCaseStudy({ isOpen, onClose }: DeFiCaseStudyProps) {
                         </div>
                       ))}
                     </div>
+
+                    {/* User Voices & Research Analysis */}
+                    <div className="mt-12">
+                      <h3 className="text-xl font-semibold text-white mb-4">Turning fragmented frustrations into actionable UX priorities</h3>
+                      <div className="rounded-xl overflow-hidden border border-white/10">
+                        <Image
+                          src="/images/turning-20fragmented-20frustrations-20into-20actionable-20ux-20priorities.png"
+                          alt="User voices and research analysis board showing categorized user feedback"
+                          width={1400}
+                          height={800}
+                          className="w-full h-auto"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </section>
 
@@ -325,6 +339,20 @@ export function DeFiCaseStudy({ isOpen, onClose }: DeFiCaseStudyProps) {
                           <p className="text-white text-sm font-medium">{step}</p>
                         </div>
                       ))}
+                    </div>
+
+                    {/* Process Visualization Comparison */}
+                    <div className="mt-12">
+                      <h3 className="text-xl font-semibold text-white mb-4">Process Visualization</h3>
+                      <div className="rounded-xl overflow-hidden border border-white/10">
+                        <Image
+                          src="/images/streamlined-20flow-20-e2-80-93-20process-20visualization.png"
+                          alt="Comparison of 8-step pre-launch flow vs streamlined 4-step launch flow"
+                          width={1400}
+                          height={800}
+                          className="w-full h-auto"
+                        />
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -359,6 +387,20 @@ export function DeFiCaseStudy({ isOpen, onClose }: DeFiCaseStudyProps) {
                           <p className="text-white/60">{item.desc}</p>
                         </div>
                       ))}
+                    </div>
+
+                    {/* UI Showcase */}
+                    <div className="mt-12">
+                      <h3 className="text-xl font-semibold text-white mb-4">Final UI</h3>
+                      <div className="rounded-xl overflow-hidden border border-white/10">
+                        <Image
+                          src="/images/ui.png"
+                          alt="Alvara platform UI showcasing BTS Factory, fund details, and mobile leaderboard"
+                          width={1400}
+                          height={1000}
+                          className="w-full h-auto"
+                        />
+                      </div>
                     </div>
                   </div>
                 </section>
