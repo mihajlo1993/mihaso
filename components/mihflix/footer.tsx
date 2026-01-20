@@ -9,20 +9,35 @@ export function Footer() {
         <div className="mb-8 flex flex-col items-center justify-between gap-6 md:flex-row">
           <MihFlixLogo size="sm" />
 
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
-            <a href="#" className="hover:text-white transition-colors">
+          <nav className="flex flex-wrap justify-center gap-6 text-sm text-gray-500" aria-label="Footer navigation">
+            <button
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: "smooth" })
+                window.location.hash = "home"
+              }}
+              className="hover:text-white transition-colors"
+            >
               Home
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
+            </button>
+            <button
+              onClick={() => (window.location.hash = "work")}
+              className="hover:text-white transition-colors"
+            >
               Case Studies
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
+            </button>
+            <button
+              onClick={() => (window.location.hash = "about")}
+              className="hover:text-white transition-colors"
+            >
               About
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
+            </button>
+            <button
+              onClick={() => (window.location.hash = "contact")}
+              className="hover:text-white transition-colors"
+            >
               Contact
-            </a>
-          </div>
+            </button>
+          </nav>
         </div>
 
         <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-600">

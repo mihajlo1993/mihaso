@@ -624,11 +624,11 @@ export const highlightReel: ContentItem[] = [
   {
     id: "highlight-1",
     type: "highlight",
-    title: "Token Platform UI Preview",
-    shortDescription: "Key screens from Alvara.xyz",
-    tags: ["UI", "Crypto", "DeFi"],
-    gradientType: "blue-purple",
-    thumbnailUrl: "/images/alvara-cover-v2.jpg",
+    title: "Simple Online Doctor",
+    shortDescription: "Healthcare rebrand & digital launch",
+    tags: ["Healthcare", "Rebrand", "UX"],
+    gradientType: "red-orange",
+    thumbnailUrl: "/images/simple-doctor-hero.png",
   },
   {
     id: "highlight-2",
@@ -642,11 +642,11 @@ export const highlightReel: ContentItem[] = [
   {
     id: "highlight-3",
     type: "highlight",
-    title: "Simple Online Doctor",
-    shortDescription: "Healthcare rebrand & digital launch",
-    tags: ["Healthcare", "Rebrand", "UX"],
-    gradientType: "cyan-blue",
-    thumbnailUrl: "/images/simple-doctor-cover.jpg",
+    title: "Token Platform UI Preview",
+    shortDescription: "Key screens from Alvara.xyz",
+    tags: ["UI", "Crypto", "DeFi"],
+    gradientType: "blue-purple",
+    thumbnailUrl: "/images/alvara-cover-v2.jpg",
   },
 ]
 

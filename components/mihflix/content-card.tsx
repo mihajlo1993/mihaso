@@ -359,7 +359,14 @@ export function ContentCard({ item, isActive, onHover, onLeave, onClick, size = 
           />
         </div>
       ) : item.thumbnailUrl ? (
-        <Image src={item.thumbnailUrl || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
+        <Image
+          src={item.thumbnailUrl || "/placeholder.svg"}
+          alt={item.title}
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 192px, (max-width: 768px) 256px, 288px"
+          quality={85}
+        />
       ) : (
         <GradientBackground type={item.gradientType} className="absolute inset-0" overlay />
       )}

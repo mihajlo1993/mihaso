@@ -42,11 +42,11 @@ export function HomeScreen({ profile }: HomeScreenProps) {
 
   const handleHighlightClick = useCallback((item: ContentItem) => {
     if (item.id === "highlight-1") {
-      setIsDeFiCaseStudyOpen(true)
+      setIsSimpleDoctorCaseStudyOpen(true)
     } else if (item.id === "highlight-2") {
       setIsTreeAppCaseStudyOpen(true)
     } else if (item.id === "highlight-3") {
-      setIsSimpleDoctorCaseStudyOpen(true)
+      setIsDeFiCaseStudyOpen(true)
     }
   }, [])
 
@@ -62,11 +62,11 @@ export function HomeScreen({ profile }: HomeScreenProps) {
         return
       }
     } else if (item.id === "highlight-1") {
-      setIsDeFiCaseStudyOpen(true)
+      setIsSimpleDoctorCaseStudyOpen(true)
     } else if (item.id === "highlight-2") {
       setIsTreeAppCaseStudyOpen(true)
     } else if (item.id === "highlight-3") {
-      setIsSimpleDoctorCaseStudyOpen(true)
+      setIsDeFiCaseStudyOpen(true)
     } else {
       setSelectedItem(item)
       setIsModalOpen(true)

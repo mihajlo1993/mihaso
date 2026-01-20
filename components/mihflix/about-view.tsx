@@ -710,6 +710,8 @@ export function AboutView() {
                       fill
                       priority
                       className="object-contain object-center"
+                      sizes="(max-width: 768px) 100vw, 600px"
+                      quality={90}
                     />
                   </div>
                 </div>

@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { cn } from "@/lib/utils"
-import { X, Layers, Eye, Shield, Zap } from "lucide-react"
+import { X, Layers, Eye, Shield, Zap, ExternalLink } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 
@@ -19,8 +19,8 @@ const sections = [
   { id: "outcomes", title: "Outcome", isHighlighted: true },
 ]
 
-const THEME_COLOR = "#06B6D4"
-const THEME_COLOR_LIGHT = "#22D3EE"
+const THEME_COLOR = "#EF4444"
+const THEME_COLOR_LIGHT = "#F87171"
 
 export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudyProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -87,7 +87,7 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 lg:p-12">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-8 lg:p-12">
           {/* Backdrop with blur */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -104,12 +104,12 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[1200px] h-[90vh] max-h-[900px] overflow-hidden bg-[#0a0a0a] rounded-2xl shadow-2xl border border-white/10"
+            className="relative w-full max-w-[1200px] h-[95vh] sm:h-[90vh] max-h-[900px] overflow-hidden bg-[#0a0a0a] rounded-xl sm:rounded-2xl shadow-2xl border border-white/10"
           >
             {/* Close button - positioned in top right corner */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-50 p-2 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 p-2 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
               aria-label="Close case study"
             >
               <X className="h-5 w-5" />
@@ -118,11 +118,11 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
             {/* Main Scroll Container */}
             <div ref={scrollRef} className="h-full overflow-y-auto scroll-smooth" onScroll={handleScroll}>
               {/* HERO SECTION - adjusted height for popup */}
-              <section ref={heroRef} className="relative min-h-[50vh] md:min-h-[60vh] overflow-hidden">
+              <section ref={heroRef} className="relative min-h-[40vh] sm:min-h-[50vh] md:min-h-[60vh] overflow-hidden">
                 {/* Hero Image with Parallax */}
                 <div className="absolute inset-0" style={{ transform: `translateY(${parallaxY}px)` }}>
                   <Image
-                    src="/images/simple-doctor-cover.jpg"
+                    src="/images/simple-doctor-hero.png"
                     alt="Simple Online Doctor"
                     fill
                     className="object-cover object-center scale-110"
@@ -183,21 +183,21 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
 
               {/* Sticky Navigation */}
               <div className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
-                <div className="flex items-center justify-center px-4 py-3">
-                  <nav className="flex items-center gap-1 rounded-full bg-white/5 p-1 border border-white/10">
+                <div className="flex items-center justify-start sm:justify-center px-3 sm:px-4 py-2 sm:py-3 overflow-x-auto scrollbar-hide">
+                  <nav className="flex items-center gap-0.5 sm:gap-1 rounded-full bg-white/5 p-0.5 sm:p-1 border border-white/10 min-w-max">
                     {sections.map((section) => (
                       <button
                         key={section.id}
                         onClick={() => scrollToSection(section.id)}
                         className={cn(
-                          "relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full",
+                          "relative px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-full whitespace-nowrap",
                           activeSection === section.id ? "text-white bg-white/10" : "text-white/50 hover:text-white/80",
                         )}
                       >
                         {section.title}
                         {section.isHighlighted && (
                           <span
-                            className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full"
+                            className="ml-1 sm:ml-1.5 inline-block h-1 sm:h-1.5 w-1 sm:w-1.5 rounded-full"
                             style={{ backgroundColor: THEME_COLOR }}
                           />
                         )}
@@ -208,7 +208,7 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
               </div>
 
               {/* Content sections */}
-              <div className="px-6 md:px-10 lg:px-14 py-12 space-y-20">
+              <div className="px-4 sm:px-6 md:px-10 lg:px-14 py-8 sm:py-12 space-y-12 sm:space-y-20">
                 {/* Overview Section */}
                 <section id="sod-overview" className="scroll-mt-24">
                   <div className="max-w-4xl mx-auto">
@@ -333,6 +333,38 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
                         </div>
                       ))}
                     </div>
+
+                    {/* Platform Highlight */}
+                    <div className="mt-12">
+                      <h3 className="text-xl font-semibold text-white mb-4">Platform Overview</h3>
+                      <div className="rounded-xl overflow-hidden border border-white/10">
+                        <Image
+                          src="/images/soh-highlight.png"
+                          alt="Simple Online Doctor platform showing clinically-proven treatments and subscription management"
+                          width={1400}
+                          height={900}
+                          className="w-full h-auto"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                          quality={90}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Key Features Flow */}
+                    <div className="mt-12">
+                      <h3 className="text-xl font-semibold text-white mb-4">Key Features</h3>
+                      <div className="rounded-xl overflow-hidden border border-white/10">
+                        <Image
+                          src="/images/soh-key-features.png"
+                          alt="User journey flow showing Assessment, Verification, and Patient portal stages"
+                          width={1400}
+                          height={900}
+                          className="w-full h-auto"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                          quality={90}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </section>
 
@@ -369,6 +401,21 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
                         </div>
                       ))}
                     </div>
+
+                    {/* Hero Image Showcase */}
+                    <div className="mt-12">
+                      <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                        <Image
+                          src="/images/simple-doctor-hero.png"
+                          alt="Simple Online Doctor app showcasing weight loss tracking and BMI progress"
+                          width={1400}
+                          height={788}
+                          className="w-full h-auto"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                          quality={90}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </section>
 
@@ -400,14 +447,23 @@ export function SimpleDoctorCaseStudy({ isOpen, onClose }: SimpleDoctorCaseStudy
                     </div>
 
                     {/* CTA */}
-                    <div className="flex flex-wrap gap-4 justify-center pt-6">
-                      <button
-                        onClick={onClose}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition-all hover:opacity-90"
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center pt-6">
+                      <a
+                        href="mailto:hello@mihasodja.com?subject=Let's work together"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white transition-all hover:opacity-90"
                         style={{ backgroundColor: THEME_COLOR }}
                       >
-                        Close Case Study
-                      </button>
+                        Get in touch
+                      </a>
+                      <a
+                        href="https://simpleonlinedoctor.co.uk"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-all"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        View project
+                      </a>
                     </div>
                   </div>
                 </section>

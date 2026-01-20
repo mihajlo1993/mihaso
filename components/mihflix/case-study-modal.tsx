@@ -193,8 +193,13 @@ export function CaseStudyModal({ item, isOpen, onClose }: CaseStudyModalProps) {
                           {content.service}
                         </span>
                       )}
-                      {content.website && (
-                        <a href="#" className="flex items-center gap-2 text-[#E50914] hover:underline">
+                      {content.website && item.liveUrl && (
+                        <a
+                          href={item.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-[#E50914] hover:underline"
+                        >
                           <ExternalLink className="h-4 w-4" />
                           {content.website}
                         </a>

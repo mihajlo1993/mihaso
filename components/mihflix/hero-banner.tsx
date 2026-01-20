@@ -39,17 +39,18 @@ export function HeroBanner({ onViewWork, onGetInTouch }: HeroBannerProps) {
 
   return (
     <div className="relative w-full h-[85vh] min-h-[500px] max-h-[900px] md:h-[70vh] md:max-h-[800px] overflow-hidden">
+      {/* Mobile: 4:3 aspect ratio with zoom, Desktop: 16:9 */}
       <div className="absolute inset-0" data-video-id="15103">
         <iframe
           width="100%"
           height="100%"
-          src="https://app.vidzflow.com/v/XaXNYRQzTC?dq=1080&ap=false&muted=true&loop=false&ctp=false&bv=false&piv=true&playsinline=false&bc=%234E5FFD&controls=false"
-          title="Hero Video"
-          className="w-full h-full object-cover scale-125 origin-center"
-          style={{ aspectRatio: "16/9" }}
+          src="https://app.vidzflow.com/v/XaXNYRQzTC?dq=1080&ap=true&muted=true&loop=true&ctp=false&bv=false&piv=true&playsinline=true&bc=%234E5FFD&controls=false"
+          title="Miha Sodja Product Design Portfolio Hero Video"
+          className="w-full h-full object-cover scale-[1.4] sm:scale-125 origin-center"
+          style={{ aspectRatio: "4/3" }}
           frameBorder="0"
           scrolling="no"
-          allow="fullscreen"
+          allow="autoplay; fullscreen"
         />
       </div>
 

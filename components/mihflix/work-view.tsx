@@ -7,16 +7,20 @@ import type { ContentItem } from "@/lib/data"
 import { HighlightReelRow } from "./highlight-reel-row"
 import { DeFiCaseStudy } from "./defi-case-study"
 import { TreeAppCaseStudy } from "./treeapp-case-study"
+import { SimpleDoctorCaseStudy } from "./simple-doctor-case-study"
 
 export function WorkView() {
   const [isDeFiCaseStudyOpen, setIsDeFiCaseStudyOpen] = useState(false)
   const [isTreeAppCaseStudyOpen, setIsTreeAppCaseStudyOpen] = useState(false)
+  const [isSimpleDoctorCaseStudyOpen, setIsSimpleDoctorCaseStudyOpen] = useState(false)
 
   const handleItemClick = useCallback((item: ContentItem) => {
     if (item.id === "highlight-1") {
-      setIsDeFiCaseStudyOpen(true)
+      setIsSimpleDoctorCaseStudyOpen(true)
     } else if (item.id === "highlight-2") {
       setIsTreeAppCaseStudyOpen(true)
+    } else if (item.id === "highlight-3") {
+      setIsDeFiCaseStudyOpen(true)
     }
   }, [])
 
@@ -65,18 +69,24 @@ export function WorkView() {
                 Get in Touch
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/in/mihasodja"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-6 py-3 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors"
               >
-                Download Resume
+                View LinkedIn
               </a>
             </div>
           </div>
         </motion.div>
       </div>
 
-      <DeFiCaseStudy isOpen={isDeFiCaseStudyOpen} onClose={() => setIsDeFiCaseStudyOpen(false)} />
+      <SimpleDoctorCaseStudy
+        isOpen={isSimpleDoctorCaseStudyOpen}
+        onClose={() => setIsSimpleDoctorCaseStudyOpen(false)}
+      />
       <TreeAppCaseStudy isOpen={isTreeAppCaseStudyOpen} onClose={() => setIsTreeAppCaseStudyOpen(false)} />
+      <DeFiCaseStudy isOpen={isDeFiCaseStudyOpen} onClose={() => setIsDeFiCaseStudyOpen(false)} />
     </motion.div>
   )
 }
