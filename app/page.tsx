@@ -15,10 +15,10 @@ type Tab = "home" | "work" | "about" | "contact"
 
 const validTabs: Tab[] = ["home", "work", "about", "contact"]
 
-function getTabFromHash(): Tab {
+function getTabFromPath(): Tab {
   if (typeof window === "undefined") return "home"
-  const hash = window.location.hash.replace("#", "")
-  return validTabs.includes(hash as Tab) ? (hash as Tab) : "home"
+  const path = window.location.pathname.replace("/", "")
+  return validTabs.includes(path as Tab) ? (path as Tab) : "home"
 }
 
 export default function MihFlixApp() {
@@ -27,23 +27,25 @@ export default function MihFlixApp() {
   const [activeTab, setActiveTab] = useState<Tab>("home")
 
   useEffect(() => {
-    // Set initial tab from hash
-    setActiveTab(getTabFromHash())
+    // Set initial tab from path
+    setActiveTab(getTabFromPath())
 
-    // Listen for hash changes (browser back/forward)
-    const handleHashChange = () => {
-      setActiveTab(getTabFromHash())
+    // Listen for popstate (browser back/forward)
+    const handlePopState = () => {
+      setActiveTab(getTabFromPath())
     }
 
-    window.addEventListener("hashchange", handleHashChange)
-    return () => window.removeEventListener("hashchange", handleHashChange)
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
   }, [])
 
   const handleProfileSelect = useCallback((profile: Profile) => {
     setSelectedProfile(profile)
     setAppState("main")
-    const currentHash = getTabFromHash()
-    window.location.hash = currentHash
+    const currentTab = getTabFromPath()
+    if (currentTab !== "home") {
+      window.history.pushState({}, "", `/${currentTab}`)
+    }
   }, [])
 
   const handleProfileSwitch = useCallback(() => {
@@ -53,7 +55,8 @@ export default function MihFlixApp() {
   const handleTabChange = useCallback((tab: string) => {
     const newTab = tab as Tab
     setActiveTab(newTab)
-    window.location.hash = newTab
+    const newPath = newTab === "home" ? "/" : `/${newTab}`
+    window.history.pushState({}, "", newPath)
   }, [])
 
   // Profile picker

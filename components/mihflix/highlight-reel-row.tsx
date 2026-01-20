@@ -82,7 +82,7 @@ export function HighlightReelRow({
       </div>
 
       <div
-        className="grid grid-cols-2 gap-3 px-6 md:flex md:flex-row md:gap-4 md:overflow-x-auto scrollbar-hide pb-4 md:px-14 lg:px-16"
+        className="flex flex-col gap-4 px-4 md:flex md:flex-row md:gap-4 md:overflow-x-auto scrollbar-hide pb-4 md:px-14 lg:px-16"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {items.map((item, index) => {
@@ -99,7 +99,7 @@ export function HighlightReelRow({
                 "relative flex-shrink-0 rounded-xl overflow-hidden cursor-pointer",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                 "transition-[filter,box-shadow] duration-200",
-                "aspect-[9/16] w-full md:aspect-auto md:w-auto",
+                "aspect-[16/9] w-full md:aspect-auto md:w-auto",
                 isActive
                   ? "shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
                   : "hover:brightness-110 hover:ring-1 hover:ring-white/20",
@@ -127,7 +127,7 @@ export function HighlightReelRow({
                     alt={item.title}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 760px"
+                    sizes="(max-width: 768px) 100vw, 760px"
                     priority={index < 2}
                   />
                 ) : (
@@ -161,12 +161,12 @@ export function HighlightReelRow({
                     </div>
                   )}
 
-                  <h3 className="text-xs md:text-2xl lg:text-3xl font-bold text-white mb-0 md:mb-2 text-left leading-tight">
+                  <h3 className="text-base md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2 text-left leading-tight">
                     {item.title}
                   </h3>
 
                   {item.shortDescription && (
-                    <p className="hidden md:block text-sm md:text-base text-gray-300 mb-4 line-clamp-2 text-left">
+                    <p className="text-xs md:text-base text-gray-300 mb-2 md:mb-4 line-clamp-2 text-left">
                       {item.shortDescription}
                     </p>
                   )}

@@ -13,26 +13,36 @@ export function Footer() {
             <button
               onClick={() => {
                 window.scrollTo({ top: 0, behavior: "smooth" })
-                window.location.hash = "home"
+                window.history.pushState({}, "", "/")
+                window.dispatchEvent(new PopStateEvent("popstate"))
               }}
               className="hover:text-white transition-colors"
             >
               Home
             </button>
             <button
-              onClick={() => (window.location.hash = "work")}
+              onClick={() => {
+                window.history.pushState({}, "", "/work")
+                window.dispatchEvent(new PopStateEvent("popstate"))
+              }}
               className="hover:text-white transition-colors"
             >
               Case Studies
             </button>
             <button
-              onClick={() => (window.location.hash = "about")}
+              onClick={() => {
+                window.history.pushState({}, "", "/about")
+                window.dispatchEvent(new PopStateEvent("popstate"))
+              }}
               className="hover:text-white transition-colors"
             >
               About
             </button>
             <button
-              onClick={() => (window.location.hash = "contact")}
+              onClick={() => {
+                window.history.pushState({}, "", "/contact")
+                window.dispatchEvent(new PopStateEvent("popstate"))
+              }}
               className="hover:text-white transition-colors"
             >
               Contact

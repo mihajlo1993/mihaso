@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { cn } from "@/lib/utils"
-import { X, Layers, Eye, Accessibility, ExternalLink } from "lucide-react"
+import { X, Layers, Eye, Accessibility, ExternalLink, ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 
@@ -26,6 +26,7 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
   const heroRef = useRef<HTMLDivElement>(null)
   const [activeSection, setActiveSection] = useState<string>("overview")
   const [scrollY, setScrollY] = useState(0)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   const handleScroll = () => {
     setScrollY(scrollRef.current?.scrollTop || 0)
@@ -183,21 +184,69 @@ export function TreeAppCaseStudy({ isOpen, onClose }: TreeAppCaseStudyProps) {
 
               {/* Sticky Navigation */}
               <div className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
-                <div className="flex items-center justify-start sm:justify-center px-3 sm:px-4 py-2 sm:py-3 overflow-x-auto scrollbar-hide">
-                  <nav className="flex items-center gap-0.5 sm:gap-1 rounded-full bg-white/5 p-0.5 sm:p-1 border border-white/10 min-w-max">
+                {/* Mobile Dropdown */}
+                <div className="sm:hidden px-4 py-3">
+                  <button
+                    onClick={() => setMobileNavOpen(!mobileNavOpen)}
+                    className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white"
+                  >
+                    <span className="text-sm font-medium">
+                      {sections.find((s) => s.id === activeSection)?.title || "Overview"}
+                    </span>
+                    <ChevronDown
+                      className={cn("h-4 w-4 transition-transform duration-200", mobileNavOpen && "rotate-180")}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {mobileNavOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-4 right-4 mt-2 rounded-lg bg-[#1a1a1a] border border-white/10 shadow-xl overflow-hidden z-50"
+                      >
+                        {sections.map((section) => (
+                          <button
+                            key={section.id}
+                            onClick={() => {
+                              scrollToSection(section.id)
+                              setMobileNavOpen(false)
+                            }}
+                            className={cn(
+                              "w-full px-4 py-3 text-left text-sm font-medium transition-colors flex items-center justify-between",
+                              activeSection === section.id
+                                ? "text-white bg-white/10"
+                                : "text-white/60 hover:text-white hover:bg-white/5",
+                            )}
+                          >
+                            {section.title}
+                            {section.isHighlighted && (
+                              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: THEME_COLOR }} />
+                            )}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Desktop Navigation */}
+                <div className="hidden sm:flex items-center justify-center px-4 py-3">
+                  <nav className="flex items-center gap-1 rounded-full bg-white/5 p-1 border border-white/10">
                     {sections.map((section) => (
                       <button
                         key={section.id}
                         onClick={() => scrollToSection(section.id)}
                         className={cn(
-                          "relative px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-full whitespace-nowrap",
+                          "relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full whitespace-nowrap",
                           activeSection === section.id ? "text-white bg-white/10" : "text-white/50 hover:text-white/80",
                         )}
                       >
                         {section.title}
                         {section.isHighlighted && (
                           <span
-                            className="ml-1 sm:ml-1.5 inline-block h-1 sm:h-1.5 w-1 sm:w-1.5 rounded-full"
+                            className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full"
                             style={{ backgroundColor: THEME_COLOR }}
                           />
                         )}

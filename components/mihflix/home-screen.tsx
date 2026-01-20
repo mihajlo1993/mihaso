@@ -53,7 +53,8 @@ export function HomeScreen({ profile }: HomeScreenProps) {
   const handleItemClick = useCallback((item: ContentItem) => {
     if (item.type === "link") {
       if (item.id === "contact") {
-        window.location.hash = "contact"
+        window.history.pushState({}, "", "/contact")
+        window.dispatchEvent(new PopStateEvent("popstate"))
         return
       } else if (item.id === "resume") {
         return
@@ -81,7 +82,8 @@ export function HomeScreen({ profile }: HomeScreenProps) {
   }, [])
 
   const scrollToContact = useCallback(() => {
-    window.location.hash = "contact"
+    window.history.pushState({}, "", "/contact")
+    window.dispatchEvent(new PopStateEvent("popstate"))
   }, [])
 
   return (
