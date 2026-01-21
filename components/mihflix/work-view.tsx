@@ -46,7 +46,16 @@ export function WorkView() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.4 }}>
-          <HighlightReelRow items={highlightReel} onItemClick={handleItemClick} size="large" />
+          <HighlightReelRow
+            items={highlightReel}
+            onItemClick={handleItemClick}
+            size="large"
+            showHeader={false}
+            isWorkPage={true}
+            mobileThumbnails={{
+              "highlight-1": "/images/simple-doctor-hero-mobile.png",
+            }}
+          />
         </motion.div>
 
         {/* Footer CTA */}

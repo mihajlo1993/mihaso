@@ -15,6 +15,9 @@ interface HighlightReelRowProps {
   size?: "default" | "large"
   title?: string
   subtitle?: string
+  showHeader?: boolean
+  mobileThumbnails?: Record<string, string>
+  isWorkPage?: boolean
 }
 
 export function HighlightReelRow({
@@ -23,6 +26,9 @@ export function HighlightReelRow({
   size = "default",
   title = "Highlight Reel",
   subtitle = "Featured case studies",
+  showHeader = true,
+  mobileThumbnails = {},
+  isWorkPage = false,
 }: HighlightReelRowProps) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id || "")
 
@@ -76,13 +82,18 @@ export function HighlightReelRow({
 
   return (
     <div className="relative py-0">
-      <div className="px-6 md:px-14 lg:px-16 mb-6 md:mb-10 text-left">
-        <h2 className="text-xl md:text-2xl font-bold text-white">{title}</h2>
-        {subtitle && <p className="text-sm text-gray-400 mt-1">{subtitle}</p>}
-      </div>
+      {showHeader && (
+        <div className="px-6 md:px-14 lg:px-16 mb-6 md:mb-10 text-left">
+          <h2 className="text-xl md:text-2xl font-bold text-white">{title}</h2>
+          {subtitle && <p className="text-sm text-gray-400 mt-1">{subtitle}</p>}
+        </div>
+      )}
 
       <div
-        className="flex flex-col gap-4 px-4 md:flex md:flex-row md:gap-4 md:overflow-x-auto scrollbar-hide pb-4 md:px-14 lg:px-16"
+        className={cn(
+          "flex flex-col gap-4 md:flex md:flex-row md:gap-4 md:overflow-x-auto scrollbar-hide pb-4",
+          isWorkPage ? "px-0" : "px-4 md:px-14 lg:px-16",
+        )}
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {items.map((item, index) => {
@@ -122,14 +133,28 @@ export function HighlightReelRow({
             >
               <div className="absolute inset-0">
                 {item.thumbnailUrl ? (
-                  <Image
-                    src={item.thumbnailUrl || "/placeholder.svg"}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 760px"
-                    priority={index < 2}
-                  />
+                  <>
+                    {/* Mobile thumbnail (only if mobileThumbnails provided) */}
+                    {mobileThumbnails[item.id] && (
+                      <Image
+                        src={mobileThumbnails[item.id] || "/placeholder.svg"}
+                        alt={item.title}
+                        fill
+                        className="object-cover md:hidden"
+                        sizes="100vw"
+                        priority={index < 2}
+                      />
+                    )}
+                    {/* Desktop thumbnail (or mobile fallback) */}
+                    <Image
+                      src={item.thumbnailUrl || "/placeholder.svg"}
+                      alt={item.title}
+                      fill
+                      className={cn("object-cover", mobileThumbnails[item.id] ? "hidden md:block" : "")}
+                      sizes="(max-width: 768px) 100vw, 760px"
+                      priority={index < 2}
+                    />
+                  </>
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900" />
                 )}
