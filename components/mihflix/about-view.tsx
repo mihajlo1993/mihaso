@@ -10,90 +10,66 @@ import { workExperiences } from "@/lib/data"
 import { ChevronDown, MapPin } from "lucide-react"
 import { GetInTouchButton } from "@/components/ui/get-in-touch-button"
 
-// All skills that will rotate through - organized for visual interest
-const allSkills = [
-  "Product Design",
-  "UI/UX",
-  "Design Systems",
-  "Prototyping",
-  "Healthcare UX",
-  "Fintech UI",
-  "Mobile Apps",
-  "Web Platforms",
-  "User Research",
-  "Wireframing",
-  "Visual Design",
-  "Interaction Design",
-  "Figma",
-  "Design Tokens",
-  "Component Libraries",
-  "Accessibility",
+// Skills for each slot - matched by approximate width to maintain layout stability
+const skillSlots = [
+  ["Product Design", "Healthcare UX", "User Research"],
+  ["UI/UX", "Fintech", "Figma"],
+  ["Design Systems", "Mobile Apps", "Visual Design"],
+  ["Prototyping", "Interaction", "Accessibility"],
 ]
 
 function RotatingSkills() {
-  const [visibleSkills, setVisibleSkills] = useState<string[]>([])
-  const [isInitialized, setIsInitialized] = useState(false)
+  const [indices, setIndices] = useState([0, 0, 0, 0])
 
-  // Initialize with 4 random skills
   useEffect(() => {
-    const shuffled = [...allSkills].sort(() => Math.random() - 0.5)
-    setVisibleSkills(shuffled.slice(0, 4))
-    setIsInitialized(true)
+    // Create separate intervals for each slot with different timings
+    const timers = [
+      setInterval(() => setIndices(prev => [
+        (prev[0] + 1) % skillSlots[0].length, prev[1], prev[2], prev[3]
+      ]), 2400),
+      setInterval(() => setIndices(prev => [
+        prev[0], (prev[1] + 1) % skillSlots[1].length, prev[2], prev[3]
+      ]), 3100),
+      setInterval(() => setIndices(prev => [
+        prev[0], prev[1], (prev[2] + 1) % skillSlots[2].length, prev[3]
+      ]), 2700),
+      setInterval(() => setIndices(prev => [
+        prev[0], prev[1], prev[2], (prev[3] + 1) % skillSlots[3].length
+      ]), 3400),
+    ]
+
+    return () => timers.forEach(clearInterval)
   }, [])
-
-  // Rotate one skill at a time at random intervals
-  useEffect(() => {
-    if (!isInitialized) return
-
-    const rotateRandomSkill = () => {
-      setVisibleSkills((prev) => {
-        const positionToChange = Math.floor(Math.random() * 4)
-        const availableSkills = allSkills.filter((s) => !prev.includes(s))
-        if (availableSkills.length === 0) return prev
-        const newSkill = availableSkills[Math.floor(Math.random() * availableSkills.length)]
-        const updated = [...prev]
-        updated[positionToChange] = newSkill
-        return updated
-      })
-    }
-
-    // Rotate every 2-3 seconds with some randomness
-    const interval = setInterval(rotateRandomSkill, 2000 + Math.random() * 1000)
-    return () => clearInterval(interval)
-  }, [isInitialized])
-
-  if (!isInitialized) {
-    return <div className="h-12" /> // Placeholder height
-  }
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.6 }}
-      className="flex justify-center"
     >
-      <div className="inline-grid grid-cols-2 sm:grid-cols-4 gap-3 place-items-center">
-        {visibleSkills.map((skill, index) => (
-          <div
-            key={index}
-            className="w-[140px] sm:w-[160px] h-10 flex items-center justify-center"
+      <div className="flex flex-wrap gap-3">
+        {skillSlots.map((skills, slotIndex) => (
+          <div 
+            key={slotIndex} 
+            className="relative h-10 overflow-hidden"
+            style={{ minWidth: slotIndex === 1 ? 80 : 130 }}
           >
-            <AnimatePresence mode="wait">
-              <motion.span
+            {skills.map((skill, skillIndex) => (
+              <span
                 key={skill}
-                initial={{ opacity: 0, scale: 0.8, filter: "blur(8px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, scale: 0.8, filter: "blur(8px)" }}
-                transition={{
-                  duration: 0.5,
-                  ease: [0.25, 0.4, 0.25, 1],
-                }}
-                className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 backdrop-blur-sm whitespace-nowrap"
+                className={cn(
+                  "absolute inset-0 flex items-center justify-center",
+                  "px-4 py-2 bg-white/5 border border-white/10 rounded-full text-gray-300",
+                  "transition-all duration-500 ease-out",
+                  skill === "Product Design" || skill === "Design Systems" ? "text-xs" : "text-sm",
+                  indices[slotIndex] === skillIndex
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-full pointer-events-none"
+                )}
               >
                 {skill}
-              </motion.span>
-            </AnimatePresence>
+              </span>
+            ))}
           </div>
         ))}
       </div>

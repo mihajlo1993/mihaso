@@ -8,23 +8,40 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Miha Sodja | Lead Product Designer | Healthcare & Fintech UX Expert",
+  title: {
+    default: "Miha Sodja | Lead Product Designer | Healthcare & Fintech UX Expert",
+    template: "%s | Miha Sodja - Product Designer",
+  },
   description:
-    "Lead Product Designer with 10+ years crafting exceptional UI/UX experiences. Specializing in healthcare platforms (Simple Online Doctor), fintech applications (Alvara DeFi), and mobile engagement (TreeApp). Available for freelance and full-time opportunities.",
+    "Miha Sodja is a Lead Product Designer with 10+ years crafting exceptional UI/UX experiences. Specializing in healthcare platforms (Simple Online Doctor - 156% conversion increase), fintech applications (Alvara DeFi - 60% drop-off reduction), and mobile engagement (TreeApp - 33% session boost). Expert in design systems, prototyping, user research, and accessibility. Available for freelance and full-time opportunities worldwide.",
   generator: "v0.app",
   keywords: [
     "Miha Sodja",
     "Miha Sodja designer",
+    "Miha Sodja portfolio",
+    "Miha Sodja product designer",
     "lead product designer",
     "senior product designer",
     "UI/UX designer",
+    "product design",
+    "UI/UX",
+    "design systems",
+    "prototyping",
+    "healthcare UX",
     "healthcare UX designer",
+    "fintech UI",
     "fintech UI designer",
     "DeFi product designer",
     "mobile app designer",
+    "mobile apps",
     "SaaS product designer",
     "design systems expert",
     "user experience designer",
+    "user research",
+    "visual design",
+    "interaction design",
+    "accessibility design",
+    "Figma expert",
     "product design portfolio",
     "Slovenia designer",
     "Europe product designer",
@@ -34,9 +51,11 @@ export const metadata: Metadata = {
     "Alvara designer",
     "telehealth UX",
     "crypto UI design",
-    "accessibility design",
+    "web platforms",
     "hire product designer",
     "freelance product designer",
+    "best product designer",
+    "top UX designer",
   ],
   authors: [{ name: "Miha Sodja", url: "https://mihasodja.com" }],
   creator: "Miha Sodja",
@@ -98,19 +117,28 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-const jsonLd = {
+const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": "https://mihasodja.com/#person",
   name: "Miha Sodja",
+  givenName: "Miha",
+  familyName: "Sodja",
   jobTitle: "Lead Product Designer",
   description:
-    "Lead Product Designer with 10+ years of experience specializing in healthcare platforms, fintech applications, and mobile engagement. Creator of Simple Online Doctor, Alvara, and TreeApp case studies.",
+    "Miha Sodja is a Lead Product Designer with 10+ years of experience specializing in healthcare platforms, fintech applications, and mobile engagement. Expert in product design, UI/UX, design systems, prototyping, user research, and accessibility.",
   url: "https://mihasodja.com",
-  image: "https://mihasodja.com/images/miha-hero.png",
+  image: {
+    "@type": "ImageObject",
+    url: "https://mihasodja.com/images/miha-hero.png",
+    width: 800,
+    height: 800,
+  },
   sameAs: [
     "https://www.linkedin.com/in/mihasodja",
     "https://twitter.com/mihasodja",
     "https://dribbble.com/mihasodja",
+    "https://www.upwork.com/freelancers/mihasodja",
   ],
   knowsAbout: [
     "Product Design",
@@ -118,11 +146,18 @@ const jsonLd = {
     "Healthcare UX",
     "Telehealth Design",
     "Fintech Design",
+    "Fintech UI",
     "DeFi Applications",
     "Mobile App Design",
+    "Mobile Apps",
     "Design Systems",
     "Accessibility Design",
     "User Research",
+    "Visual Design",
+    "Interaction Design",
+    "Prototyping",
+    "Figma",
+    "Web Platforms",
   ],
   hasOccupation: {
     "@type": "Occupation",
@@ -131,29 +166,64 @@ const jsonLd = {
       "@type": "Country",
       name: "Slovenia",
     },
-    skills: "Product Design, UI/UX Design, Healthcare UX, Fintech UI, Design Systems, Prototyping, User Research",
+    skills: "Product Design, UI/UX, Healthcare UX, Fintech UI, Design Systems, Prototyping, User Research, Visual Design, Interaction Design, Accessibility, Figma, Mobile Apps",
+  },
+  alumniOf: {
+    "@type": "Organization",
+    name: "University of Ljubljana",
+  },
+  nationality: {
+    "@type": "Country",
+    name: "Slovenia",
   },
   workExample: [
     {
       "@type": "CreativeWork",
       name: "Simple Online Doctor",
-      description: "Healthcare rebrand and digital launch increasing conversions by 156%",
+      description: "Healthcare platform rebrand and digital launch increasing conversions by 156%",
       url: "https://simpleonlinedoctor.co.uk",
+      creator: { "@id": "https://mihasodja.com/#person" },
     },
     {
       "@type": "CreativeWork",
       name: "TreeApp",
       description: "Mobile app UX redesign improving session duration by 33%",
       url: "https://www.thetreeapp.org",
+      creator: { "@id": "https://mihasodja.com/#person" },
     },
     {
       "@type": "CreativeWork",
       name: "Alvara",
       description: "DeFi token distribution platform reducing user drop-off by 60%",
       url: "https://alvara.xyz",
+      creator: { "@id": "https://mihasodja.com/#person" },
     },
   ],
 }
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://mihasodja.com/#website",
+  url: "https://mihasodja.com",
+  name: "Miha Sodja | Lead Product Designer",
+  description: "Portfolio of Miha Sodja, Lead Product Designer specializing in healthcare UX, fintech UI, and mobile apps.",
+  publisher: { "@id": "https://mihasodja.com/#person" },
+  inLanguage: "en-US",
+}
+
+const portfolioSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": "https://mihasodja.com/#profilepage",
+  url: "https://mihasodja.com",
+  name: "Miha Sodja Portfolio",
+  mainEntity: { "@id": "https://mihasodja.com/#person" },
+  dateCreated: "2024-01-01",
+  dateModified: new Date().toISOString().split("T")[0],
+}
+
+const jsonLd = [personSchema, websiteSchema, portfolioSchema]
 
 export default function RootLayout({
   children,
