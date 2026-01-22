@@ -1,50 +1,96 @@
 "use client"
 
-import { GradientBackground } from "./gradient-background"
-import { Mail, ExternalLink, Calendar, Download, Linkedin } from "lucide-react"
+import React from "react"
 
-const contactItems = [
+import { useState } from "react"
+import { GradientBackground } from "./gradient-background"
+import { AnimatedMail, AnimatedExternalLink, AnimatedDownload } from "@/components/ui/animated-icons"
+import { Calendar, Linkedin } from "lucide-react"
+import { motion } from "framer-motion"
+
+interface ContactItem {
+  id: string
+  title: string
+  description: string
+  Icon: React.ComponentType<{ className?: string; size?: number; isHovered?: boolean }>
+  gradient: "blue-purple" | "teal-green" | "cyan-blue" | "orange-pink" | "purple-blue"
+  action: string
+  isAnimated?: boolean
+}
+
+const contactItems: ContactItem[] = [
   {
     id: "email",
     title: "Email",
     description: "hello@mihasodja.com",
-    icon: Mail,
-    gradient: "blue-purple" as const,
+    Icon: AnimatedMail,
+    gradient: "blue-purple",
     action: "Send Email",
+    isAnimated: true,
   },
   {
     id: "upwork",
     title: "Upwork",
     description: "Top Rated Plus",
-    icon: ExternalLink,
-    gradient: "teal-green" as const,
+    Icon: AnimatedExternalLink,
+    gradient: "teal-green",
     action: "View Profile",
+    isAnimated: true,
   },
   {
     id: "linkedin",
     title: "LinkedIn",
     description: "Connect",
-    icon: Linkedin,
-    gradient: "cyan-blue" as const,
+    Icon: Linkedin,
+    gradient: "cyan-blue",
     action: "Connect",
   },
   {
     id: "calendar",
     title: "Book a Call",
     description: "30 min intro",
-    icon: Calendar,
-    gradient: "orange-pink" as const,
+    Icon: Calendar,
+    gradient: "orange-pink",
     action: "Schedule",
   },
   {
     id: "resume",
     title: "Resume",
     description: "PDF format",
-    icon: Download,
-    gradient: "purple-blue" as const,
+    Icon: AnimatedDownload,
+    gradient: "purple-blue",
     action: "Download",
+    isAnimated: true,
   },
 ]
+
+function ContactButton({ item }: { item: ContactItem }) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative overflow-hidden rounded-xl"
+    >
+      <GradientBackground type={item.gradient} overlay={false} className="px-6 py-4">
+        <div className="flex items-center gap-3">
+          {item.isAnimated ? (
+            <item.Icon className="h-5 w-5 text-white" size={20} isHovered={isHovered} />
+          ) : (
+            <item.Icon className="h-5 w-5 text-white" />
+          )}
+          <div className="text-left">
+            <p className="font-bold text-white">{item.title}</p>
+            <p className="text-xs text-white/70">{item.description}</p>
+          </div>
+        </div>
+      </GradientBackground>
+    </motion.button>
+  )
+}
 
 export function ContactSection() {
   return (
@@ -58,20 +104,7 @@ export function ContactSection() {
 
         <div className="flex flex-wrap justify-center gap-4">
           {contactItems.map((item) => (
-            <button
-              key={item.id}
-              className="group relative overflow-hidden rounded-xl transition-transform hover:scale-105"
-            >
-              <GradientBackground type={item.gradient} overlay={false} className="px-6 py-4">
-                <div className="flex items-center gap-3">
-                  <item.icon className="h-5 w-5 text-white" />
-                  <div className="text-left">
-                    <p className="font-bold text-white">{item.title}</p>
-                    <p className="text-xs text-white/70">{item.description}</p>
-                  </div>
-                </div>
-              </GradientBackground>
-            </button>
+            <ContactButton key={item.id} item={item} />
           ))}
         </div>
       </div>

@@ -107,7 +107,7 @@ export function HighlightReelRow({
               onKeyDown={(e) => handleKeyDown(e, item)}
               initial={false}
               className={cn(
-                "relative flex-shrink-0 rounded-xl overflow-hidden cursor-pointer",
+                "highlight-card relative flex-shrink-0 rounded-xl overflow-hidden cursor-pointer",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                 "transition-[filter,box-shadow] duration-200",
                 "aspect-[16/9] w-full md:aspect-auto md:w-auto",
@@ -131,7 +131,7 @@ export function HighlightReelRow({
               aria-label={isActive ? `View ${item.title} case study` : `Select ${item.title}`}
               aria-pressed={isActive}
             >
-              <div className="absolute inset-0">
+              <div className="absolute inset-0 overflow-hidden">
                 {item.thumbnailUrl ? (
                   <>
                     {/* Mobile thumbnail (only if mobileThumbnails provided) */}
@@ -140,7 +140,7 @@ export function HighlightReelRow({
                         src={mobileThumbnails[item.id] || "/placeholder.svg"}
                         alt={item.title}
                         fill
-                        className="object-cover md:hidden"
+                        className="highlight-card-image object-cover md:hidden"
                         sizes="100vw"
                         priority={index < 2}
                       />
@@ -150,7 +150,7 @@ export function HighlightReelRow({
                       src={item.thumbnailUrl || "/placeholder.svg"}
                       alt={item.title}
                       fill
-                      className={cn("object-cover", mobileThumbnails[item.id] ? "hidden md:block" : "")}
+                      className={cn("highlight-card-image object-cover", mobileThumbnails[item.id] ? "hidden md:block" : "")}
                       sizes="(max-width: 768px) 100vw, 760px"
                       priority={index < 2}
                     />

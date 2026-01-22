@@ -174,6 +174,16 @@ export function TestimonialsRow({ testimonials }: TestimonialsRowProps) {
             canScrollRight ? "opacity-100" : "opacity-0",
           )}
         />
+
+        {/* Mobile scroll indicator */}
+        {canScrollRight && (
+          <div className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 z-20 flex items-center gap-1 pointer-events-none">
+            <div className="scroll-hint flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+              <span className="text-xs text-white/70">Swipe</span>
+              <ChevronRight className="h-3 w-3 text-white/70" />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )

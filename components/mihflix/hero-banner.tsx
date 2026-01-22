@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
+import { AnimatedPlay, AnimatedSend } from "@/components/ui/animated-icons"
 
 interface HeroBannerProps {
   onViewWork: () => void
@@ -11,6 +12,9 @@ interface HeroBannerProps {
 const chips = ["Product Design", "UI/UX", "Design Systems", "Digital Health"]
 
 export function HeroBanner({ onViewWork, onGetInTouch }: HeroBannerProps) {
+  const [isViewWorkHovered, setIsViewWorkHovered] = useState(false)
+  const [isGetInTouchHovered, setIsGetInTouchHovered] = useState(false)
+
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (!e.origin.includes("vidzflow")) return
@@ -94,25 +98,20 @@ export function HeroBanner({ onViewWork, onGetInTouch }: HeroBannerProps) {
             <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:gap-4 md:pt-5">
               <button
                 onClick={onViewWork}
-                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 sm:py-3 bg-white text-black font-semibold rounded-lg hover:bg-white/90 transition-colors text-base"
+                onMouseEnter={() => setIsViewWorkHovered(true)}
+                onMouseLeave={() => setIsViewWorkHovered(false)}
+                className="group flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 sm:py-3 bg-white text-black font-semibold rounded-lg hover:bg-white/90 transition-colors text-base"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M6.3 2.841A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                </svg>
+                <AnimatedPlay size={20} isHovered={isViewWorkHovered} />
                 View work
               </button>
               <button
                 onClick={onGetInTouch}
-                className="flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 sm:py-3 bg-gray-600/80 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors backdrop-blur-sm text-base"
+                onMouseEnter={() => setIsGetInTouchHovered(true)}
+                onMouseLeave={() => setIsGetInTouchHovered(false)}
+                className="group flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 sm:py-3 bg-gray-600/80 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors backdrop-blur-sm text-base"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
+                <AnimatedSend size={20} isHovered={isGetInTouchHovered} />
                 Get in touch
               </button>
             </div>

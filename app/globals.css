@@ -122,6 +122,13 @@
   body {
     @apply bg-background text-foreground;
   }
+  button,
+  [role="button"],
+  a,
+  [onclick],
+  .cursor-pointer {
+    cursor: pointer;
+  }
 }
 
 .scrollbar-hide {
@@ -695,5 +702,67 @@ html {
   50% {
     opacity: 0.6;
     transform: scale(1.2);
+  }
+}
+
+/* Zoom effect for highlight reel images */
+.highlight-card-image {
+  transition: transform 0.7s cubic-bezier(0.25, 0.4, 0.25, 1);
+}
+
+.highlight-card:hover .highlight-card-image {
+  transform: scale(1.08);
+}
+
+/* Timeline glow animation */
+@keyframes timelineGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 0 0 16px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.8), 0 0 32px rgba(255, 255, 255, 0.4);
+  }
+}
+
+.timeline-line-glow {
+  animation: timelineGlow 2s ease-in-out infinite;
+}
+
+/* Scroll indicator animation */
+@keyframes scrollHint {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(8px);
+    opacity: 1;
+  }
+}
+
+.scroll-hint {
+  animation: scrollHint 1.5s ease-in-out infinite;
+}
+
+/* Skills rotation animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
   }
 }
