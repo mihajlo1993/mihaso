@@ -108,10 +108,15 @@ export function Billboard({ item, isVisible }: BillboardProps) {
               {item?.secondaryCTA || "Browse Portfolio"}
             </button>
             {showDefault && (
-              <button className="flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-white">
+              <a
+                href="/cv"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-white"
+              >
                 <Download className="h-4 w-4" />
                 Download Resume
-              </button>
+              </a>
             )}
           </div>
         </div>

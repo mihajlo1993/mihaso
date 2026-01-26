@@ -15,6 +15,7 @@ interface ContactItem {
   Icon: React.ComponentType<{ className?: string; size?: number; isHovered?: boolean }>
   gradient: "blue-purple" | "teal-green" | "cyan-blue" | "orange-pink" | "purple-blue"
   action: string
+  href: string
   isAnimated?: boolean
 }
 
@@ -26,6 +27,7 @@ const contactItems: ContactItem[] = [
     Icon: AnimatedMail,
     gradient: "blue-purple",
     action: "Send Email",
+    href: "mailto:hello@mihasodja.com",
     isAnimated: true,
   },
   {
@@ -35,6 +37,7 @@ const contactItems: ContactItem[] = [
     Icon: AnimatedExternalLink,
     gradient: "teal-green",
     action: "View Profile",
+    href: "https://www.upwork.com/freelancers/mihasodja",
     isAnimated: true,
   },
   {
@@ -44,6 +47,7 @@ const contactItems: ContactItem[] = [
     Icon: Linkedin,
     gradient: "cyan-blue",
     action: "Connect",
+    href: "https://linkedin.com/in/mihasodja",
   },
   {
     id: "calendar",
@@ -52,6 +56,7 @@ const contactItems: ContactItem[] = [
     Icon: Calendar,
     gradient: "orange-pink",
     action: "Schedule",
+    href: "https://calendly.com/mihasodja",
   },
   {
     id: "resume",
@@ -60,15 +65,20 @@ const contactItems: ContactItem[] = [
     Icon: AnimatedDownload,
     gradient: "purple-blue",
     action: "Download",
+    href: "/cv",
     isAnimated: true,
   },
 ]
 
 function ContactButton({ item }: { item: ContactItem }) {
   const [isHovered, setIsHovered] = useState(false)
+  const isExternal = item.href.startsWith("http") || item.href.startsWith("mailto:")
 
   return (
-    <motion.button
+    <motion.a
+      href={item.href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
       onMouseEnter={() => setIsHovered(true)}
@@ -88,7 +98,7 @@ function ContactButton({ item }: { item: ContactItem }) {
           </div>
         </div>
       </GradientBackground>
-    </motion.button>
+    </motion.a>
   )
 }
 
