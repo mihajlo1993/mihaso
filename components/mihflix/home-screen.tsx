@@ -57,6 +57,8 @@ export function HomeScreen({ profile }: HomeScreenProps) {
         window.dispatchEvent(new PopStateEvent("popstate"))
         return
       } else if (item.id === "resume") {
+        // Open CV page in new tab for download
+        window.open("/cv", "_blank", "noopener,noreferrer")
         return
       } else if (item.liveUrl) {
         window.open(item.liveUrl, "_blank", "noopener,noreferrer")
