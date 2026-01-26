@@ -88,17 +88,17 @@ export default function CVPage() {
             
             {/* Contact info */}
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400 print:text-gray-600">
-              <a href="mailto:hello@mihasodja.com" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
+              <a href="mailto:hello@mihaso.io" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
                 <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                hello@mihasodja.com
+                hello@mihaso.io
               </a>
               <a href="https://linkedin.com/in/sodmi" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
                 <Linkedin className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 linkedin.com/in/sodmi
               </a>
-              <a href="https://mihasodja.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
+              <a href="https://mihaso.io" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
                 <Globe className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                mihasodja.com
+                mihaso.io
               </a>
               <span className="flex items-center gap-1.5">
                 <MapPin className="w-4 h-4" />
@@ -261,8 +261,8 @@ export default function CVPage() {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 print:text-gray-400">
               <p className="flex items-center gap-1.5">
                 Full portfolio and case studies at{" "}
-                <a href="https://mihasodja.com" className="text-white print:text-black font-medium hover:underline inline-flex items-center gap-0.5">
-                  mihasodja.com
+                <a href="https://mihaso.io" className="text-white print:text-black font-medium hover:underline inline-flex items-center gap-0.5">
+                  mihaso.io
                   <ExternalLink className="w-3 h-3 no-print" />
                 </a>
               </p>
