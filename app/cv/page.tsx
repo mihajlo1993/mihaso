@@ -75,34 +75,26 @@ export default function CVPage() {
                   Senior Product Designer
                 </h2>
               </div>
-              <div className="no-print flex items-center gap-2">
-                <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 text-xs font-semibold rounded-full border border-emerald-500/20 flex items-center gap-1.5">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                  </span>
-                  Available for work
-                </span>
-              </div>
+              
             </div>
             
             {/* Contact info */}
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400 print:text-gray-600">
-              <a href="mailto:hello@mihasodja.com" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
+              <a href="mailto:miha.sodja@gmail.com" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
                 <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                hello@mihasodja.com
+                miha.sodja@gmail.com
               </a>
               <a href="https://linkedin.com/in/sodmi" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
                 <Linkedin className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 linkedin.com/in/sodmi
               </a>
-              <a href="https://mihasodja.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
+              <a href="https://mihaso.io" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white print:hover:text-black transition-colors group">
                 <Globe className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                mihasodja.com
+                mihaso.io
               </a>
               <span className="flex items-center gap-1.5">
                 <MapPin className="w-4 h-4" />
-                Slovenia, EU
+                Toulouse, France
               </span>
             </div>
           </header>
@@ -261,12 +253,11 @@ export default function CVPage() {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 print:text-gray-400">
               <p className="flex items-center gap-1.5">
                 Full portfolio and case studies at{" "}
-                <a href="https://mihasodja.com" className="text-white print:text-black font-medium hover:underline inline-flex items-center gap-0.5">
-                  mihasodja.com
+                <a href="https://mihaso.io" className="text-white print:text-black font-medium hover:underline inline-flex items-center gap-0.5">
+                  mihaso.io
                   <ExternalLink className="w-3 h-3 no-print" />
                 </a>
               </p>
-              <p className="text-gray-600 print:text-gray-500">References available upon request</p>
             </div>
           </footer>
         </div>
